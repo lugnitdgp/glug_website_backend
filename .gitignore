@@ -1,0 +1,10 @@
+### Python ###
+# Byte-compiled files
+__pycache__/
+*.py[cod]
+
+__pycache__/
+local_settings.py
+
+.env
+db.sqlite3
