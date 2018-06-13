@@ -3,6 +3,9 @@
 __pycache__/
 *.py[cod]
 
+.vscode/
+settings.json
+
 __pycache__/
 local_settings.py
 
