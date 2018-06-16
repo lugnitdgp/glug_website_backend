@@ -19,11 +19,11 @@ class Event(models.Model):
     pub_date = models.DateTimeField(auto_now=True)
     pub_by = models.CharField(max_length=255, blank=True, null=True)
     edited_by = models.CharField(max_length=255, blank=True, null=True)
-    status = models.CharField(max_length=64, choices=STATUS, blank=True)
+    status = models.CharField(max_length=64, choices=STATUS)
     show = models.BooleanField(default = True)
 
-    # def __str__(slef):
-    #     self.identifier
+    def __str__(self):
+        return self.identifier
     
 class Profile(models.Model):
     first_name = models.CharField(max_length=255)
@@ -39,8 +39,8 @@ class Profile(models.Model):
     degree_name = models.CharField(max_length = 64)
     year_name = models.CharField(max_length = 16)
 
-    # def __str__(self):
-    #     self.first_name
+    def __str__(self):
+        return self.first_name
 
 class ImageCard(models.Model):
     image = models.ImageField()
