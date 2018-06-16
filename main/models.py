@@ -52,4 +52,5 @@ class Profile(models.Model):
         return self.first_name
 
 class ImageCard(models.Model):
-    image = models.ImageField()
+    image = models.ImageField(upload_to='card_images/')
+    cards_text = models.TextField(max_length=1024)
