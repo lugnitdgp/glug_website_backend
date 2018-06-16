@@ -3,19 +3,27 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Event(models.Model):
-    identifier = models.CharField(max_length = 64)
+    identifier = models.CharField(max_length = 64, unique=True)
     title = models.CharField(max_length = 255)
     event_image = models.ImageField(upload_to='event_images/', null=True, blank=True)
     description = models.TextField(blank=True, null=True)
-    venue = models.CharField(max_length=255, blank =True, null= True)
-    event_timing = models.DateTimeField(blank =True, null= True)
-
+    
     #Choices of status
     STATUS = (
-        ('d', 'Draft'),
-        ('f', 'Final'),
+        ('DRAFT', 'Draft'),
+        ('FINAL', 'Final'),
+    )
+    #Choices of event type
+    TYPE =(
+        ('ONLINE', 'Online'),
+        ('WORKSHOP', 'Workshop'),
+        ('TALK', 'Talk Show'),
+        ('OFFLINE', 'Other Offline'),
     )
 
+    event_type = models.CharField(max_length=64, choices=TYPE)
+    venue = models.CharField(max_length=255, blank =True, null= True)
+    event_timing = models.DateTimeField(blank =True, null= True)
     pub_date = models.DateTimeField(auto_now=True)
     pub_by = models.CharField(max_length=255, blank=True, null=True)
     edited_by = models.CharField(max_length=255, blank=True, null=True)
@@ -24,7 +32,8 @@ class Event(models.Model):
 
     def __str__(self):
         return self.identifier
-    
+
+
 class Profile(models.Model):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
