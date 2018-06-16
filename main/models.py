@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Event(models.Model):
-    identifier = models.CharField(max_length = 64, unique=True)
+    identifier = models.CharField(max_length = 64, unique=True, help_text="Unique Identifier for events")
     title = models.CharField(max_length = 255)
     event_image = models.ImageField(upload_to='event_images/', null=True, blank=True)
     description = models.TextField(blank=True, null=True)
@@ -22,7 +22,8 @@ class Event(models.Model):
     )
 
     event_type = models.CharField(max_length=64, choices=TYPE)
-    venue = models.CharField(max_length=255, blank =True, null= True)
+    venue = models.CharField(max_length=255, blank=True, null=True, help_text="Venue for Offline Events.")
+    url = models.URLField(max_length=255, blank=True, null=True, help_text="URL for Online Events.")
     event_timing = models.DateTimeField(blank =True, null= True)
     pub_date = models.DateTimeField(auto_now=True)
     pub_by = models.CharField(max_length=255, blank=True, null=True)
@@ -52,5 +53,6 @@ class Profile(models.Model):
         return self.first_name
 
 class ImageCard(models.Model):
+    card_id = models.CharField(max_length=64, unique=True)
     image = models.ImageField(upload_to='card_images/')
-    cards_text = models.TextField(max_length=1024)
+    cards_text = models.TextField(max_length=1024, blank=True, null=True)
