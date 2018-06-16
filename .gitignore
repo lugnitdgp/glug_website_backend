@@ -20,3 +20,4 @@ main/migrations/*
 ##
 blog/migrations/*
 ##
+db.json
