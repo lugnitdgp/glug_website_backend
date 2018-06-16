@@ -3,10 +3,10 @@ from django.contrib.auth.models import User
 from main.models import Event, Profile
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('url', 'username', 'email', 'is_staff')
+        fields = ('id', 'username', 'email', 'is_staff')
 
 class EventSerializer(serializers.ModelSerializer):
     """Event fields serializer"""
