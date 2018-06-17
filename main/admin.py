@@ -22,8 +22,8 @@ class EventAdmin(admin.ModelAdmin):
         return format_html(
             '<img src="{url}" width="{width}" height={height} />'.format(
             url = obj.event_image.url,
-            width='400px',
-            height='400px',
+            width='450px',
+            height='auto',
             )
         )
 

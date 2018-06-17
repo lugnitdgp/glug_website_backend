@@ -33,6 +33,18 @@ class Event(models.Model):
 
     def __str__(self):
         return self.identifier
+    
+    def save(self, *args, **kwargs):
+        # Check if Set to 'DRAFT' then set show to false
+        # Check online/offline and set url or venue accordingly
+        # Offline events may have links for other purpose
+        if self.status == "DRAFT":
+            self.show = False
+        
+        if self.event_type == "ONLINE":
+            self.venue = None
+        super().save(*args, **kwargs)
+
 
 
 class Profile(models.Model):
