@@ -17,6 +17,11 @@ class EventSerializer(serializers.ModelSerializer):
 
 class ProfileSerializer(serializers.ModelSerializer):
     """Profile serializer"""
+    # Using Metod field to get a field value of OnetoOneFiled
+    user_name = serializers.SerializerMethodField('get_username')
+    def get_username(self, obj):
+        return obj.user.username
+
     class Meta:
         model = Profile
-        fields = ('id', 'first_name','last_name','alias','degree_name','year_name')
+        fields = ('id', 'user_name','first_name','last_name','alias','degree_name','year_name')

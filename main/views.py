@@ -8,24 +8,21 @@ class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
     lookup_field = 'identifier'
+    http_method_names = ['get']
 
 event_list = EventViewSet.as_view({
-    'get':'list',
-    'post':'create'
+    'get':'list'
 })
 
 event_detail = EventViewSet.as_view({
-    'get': 'retrieve',
-    'put': 'update',
-    'patch': 'partial_update',
-    'delete': 'destroy'
+    'get': 'retrieve'
 })
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
-
+    http_method_names = ['get']
 
 # ViewSets define the view behavior.
 class UserViewSet(viewsets.ModelViewSet):
