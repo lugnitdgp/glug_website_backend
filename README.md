@@ -12,7 +12,7 @@ i.e `venv` or `pipenv`.
     - pillow 5.1.x
     - djangorestframework 3.8.x
 
-For debian based disto, in virtual evironment terminal type
+For debian based distro, in virtual evironment terminal type
 ```shell
 pip install django djangorestframework pillow
 ```
