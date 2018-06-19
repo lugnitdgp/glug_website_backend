@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html 
-from main.models import Event, Profile, ImageCard
+# from main.models import Event, Profile, ImageCard
+from main import models
 
 class EventAdmin(admin.ModelAdmin):
     list_display = ['identifier','status','show','action_show']
@@ -34,6 +35,7 @@ class EventAdmin(admin.ModelAdmin):
     action_show.allow_tags = True
     action_show.short_description = "Show On Site"
 
-admin.site.register(Event, EventAdmin)
-admin.site.register(Profile)
-admin.site.register(ImageCard)
+admin.site.register(models.Event, EventAdmin)
+admin.site.register(models.Profile)
+admin.site.register(models.ImageCard)
+admin.site.register(models.About)

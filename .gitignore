@@ -21,3 +21,6 @@ main/migrations/*
 blog/migrations/*
 ##
 db.json
+##
+static/*
+##

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from main.models import Event, Profile
+from main.models import Event, Profile, About
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -25,3 +25,9 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ('id', 'user_name','first_name','last_name','alias','degree_name','year_name')
+
+
+class AboutSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = About
+        fields = ('identifier', 'content')

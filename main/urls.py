@@ -1,7 +1,7 @@
 from django.urls import include, path
 from rest_framework import routers
 from . import views
-from main.views import EventViewSet, ProfileViewSet, UserViewSet
+from main.views import EventViewSet, ProfileViewSet, UserViewSet, AboutViewSet
 
 
 #AppName 
@@ -11,6 +11,7 @@ router = routers.DefaultRouter()
 # router.register(r'users', UserViewSet)
 router.register(r'events', EventViewSet)
 router.register(r'profiles', ProfileViewSet)
+router.register(r'about', AboutViewSet)
 
 urlpatterns = router.urls
 
