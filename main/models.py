@@ -7,7 +7,7 @@ class Event(models.Model):
     identifier = models.CharField(max_length = 64, unique=True, help_text="Unique Identifier for events")
     title = models.CharField(max_length = 255)
     event_image = models.ImageField(upload_to='event_images/', null=True, blank=True)
-    description = models.TextField(blank=True, null=True)
+    description = RichTextField(blank=True, null=True)
     
     #Choices of status
     STATUS = (

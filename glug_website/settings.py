@@ -112,6 +112,12 @@ REST_FRAMEWORK = {
     ]
 }
 
+# CKEDITOR_CONFIGS = {
+#     'full_toolbar': {
+#         'toolbar': 'full',
+#     },
+# }
+
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
