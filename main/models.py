@@ -77,3 +77,10 @@ class About(models.Model):
 
     def __str__(self):
         return self.identifier
+
+
+class Project(models.Model):
+    identifier = models.CharField(max_length=64, unique=True)
+    title = models.CharField(max_length=512)
+    description = RichTextField()
+    gitlink = models.URLField(null=True, blank=True)
