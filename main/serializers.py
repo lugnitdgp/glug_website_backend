@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from main.models import Event, Profile, About, Project
+from main.models import Event, Profile, About, Project, Contact
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -36,3 +36,8 @@ class ProjectSerializers(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = ('identifier','title','description','gitlink')
+
+class ContactSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Contact
+        fields = ('id','name','email','phone_number','message')    

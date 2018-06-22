@@ -84,3 +84,10 @@ class Project(models.Model):
     title = models.CharField(max_length=512)
     description = RichTextField()
     gitlink = models.URLField(null=True, blank=True)
+
+class Contact(models.Model):
+    """For Contact Us endpoint only"""
+    name = models.CharField(max_length=255)
+    email = models.EmailField()
+    phone_number = models.CharField(max_length=14, blank=True, null=True)
+    message = models.TextField(max_length=1024, blank=True, null=True)

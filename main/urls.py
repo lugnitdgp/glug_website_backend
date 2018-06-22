@@ -13,6 +13,7 @@ router.register(r'events', views.EventViewSet)
 router.register(r'profiles', views.ProfileViewSet)
 router.register(r'about', views.AboutViewSet)
 router.register(r'project', views.ProjectViewSet)
+router.register(r'contact', views.ContactViewSet)
 
 urlpatterns = router.urls
 

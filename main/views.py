@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets, generics
 from django.contrib.auth.models import User
-from main.models import Event, Profile, About, Project
+from main.models import Event, Profile, About, Project, Contact
 from main import serializers
 
 class EventViewSet(viewsets.ModelViewSet):
@@ -48,4 +48,9 @@ class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = serializers.ProjectSerializers
     lookup_field = 'identifier'
+    http_method_names = ['get']
+
+class ContactViewSet(viewsets.ModelViewSet):
+    queryset = Contact.objects.all()
+    serializer_class = serializers.ContactSerializers
     http_method_names = ['get']
