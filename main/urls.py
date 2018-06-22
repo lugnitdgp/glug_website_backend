@@ -9,9 +9,10 @@ app_name = 'main'
 
 router = routers.DefaultRouter()
 # router.register(r'users', UserViewSet)
-router.register(r'events', EventViewSet)
-router.register(r'profiles', ProfileViewSet)
-router.register(r'about', AboutViewSet)
+router.register(r'events', views.EventViewSet)
+router.register(r'profiles', views.ProfileViewSet)
+router.register(r'about', views.AboutViewSet)
+router.register(r'project', views.ProjectViewSet)
 
 urlpatterns = router.urls
 
