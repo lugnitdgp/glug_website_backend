@@ -3,11 +3,11 @@ from django.utils.html import format_html
 # from main.models import Event, Profile, ImageCard
 from main import models
 
-
 from django.contrib.admin.models import LogEntry, ADDITION, CHANGE, DELETION
 from django.utils.html import escape
 from django.urls import reverse, NoReverseMatch
 from django.contrib.auth.models import User
+from django.contrib.sessions.models import Session
 
 class EventAdmin(admin.ModelAdmin):
     list_display = ['identifier','status','show','action_show']
@@ -146,6 +146,31 @@ class LogEntryAdmin(admin.ModelAdmin):
 
 admin.site.register(LogEntry, LogEntryAdmin)
 ## Logentry code Ends
+
+## Session Admin code starts
+class SessionAdmin(admin.ModelAdmin):
+    def _session_data(self, obj):
+        return obj.get_decoded()
+
+    def get_username(self, obj):
+        session_data = obj.get_decoded()
+        uid = session_data.get('_auth_user_id', None)
+        try:
+            user_obj = User.objects.get(pk=uid)
+        except Exception:
+            user_obj = None
+
+        if user_obj:
+            return user_obj
+        else:
+            return "Anon"
+    get_username.short_description = "Username"
+
+    list_display = ['session_key', 'get_username', 'expire_date']
+
+
+admin.site.register(Session, SessionAdmin)
+## SessionAdmin code ends
 
 admin.site.register(models.Event, EventAdmin)
 admin.site.register(models.Profile)
