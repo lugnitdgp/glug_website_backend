@@ -3,7 +3,7 @@ from django.utils.html import format_html
 # from main.models import Event, Profile, ImageCard
 from main import models
 
-from django.contrib import admin
+
 from django.contrib.admin.models import LogEntry, ADDITION, CHANGE, DELETION
 from django.utils.html import escape
 from django.urls import reverse, NoReverseMatch
@@ -128,13 +128,13 @@ class LogEntryAdmin(admin.ModelAdmin):
         repr_ = escape(obj.object_repr)
         try:
             href = reverse('admin:%s_%s_change' % (ct.app_label, ct.model), args=[obj.object_id])
-            link = u'<a href="%s">%s</a>' % (href, repr_)
+            link = '<a href="%s">%s</a>' % (href, repr_)
         except NoReverseMatch:
             link = repr_
-        return link if obj.action_flag != DELETION else repr_
+        return format_html(link) if obj.action_flag != DELETION else repr_
     object_link.allow_tags = True
     object_link.admin_order_field = 'object_repr'
-    object_link.short_description = u'object'
+    object_link.short_description = 'object'
 
     def queryset(self, request):
         return super(LogEntryAdmin, self).queryset(request) \
