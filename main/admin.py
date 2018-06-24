@@ -166,6 +166,9 @@ class SessionAdmin(admin.ModelAdmin):
             return "Anon"
     get_username.short_description = "Username"
 
+    def has_add_permission(self, request):
+        return False
+
     list_display = ['session_key', 'get_username', 'expire_date']
 
 
