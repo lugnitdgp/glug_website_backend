@@ -71,9 +71,13 @@ class Profile(models.Model):
     image = models.ImageField(upload_to='member_images/', blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
     phone_number = models.CharField(max_length=14, blank=True, null=True)
-
     degree_name = models.CharField(max_length = 64, choices=DEGREE)
     year_name = models.CharField(max_length = 16, choices=YEAR)
+
+    git_link = models.URLField(null=True, blank=True)
+    facebook_link = models.URLField(null=True, blank=True)
+    twitter_link = models.URLField(null=True, blank=True)
+    reddit_link = models.URLField(null=True, blank=True)
 
     def __str__(self):
         return self.first_name
