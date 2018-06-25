@@ -21,7 +21,7 @@ class Event(models.Model):
         ('TALK', 'Talk Show'),
         ('OFFLINE', 'Other Offline'),
     )
-
+    
     event_type = models.CharField(max_length=64, choices=TYPE)
     venue = models.CharField(max_length=255, blank=True, null=True, help_text="Venue for Offline Events.")
     url = models.URLField(max_length=255, blank=True, null=True, help_text="URL for Online Events.")
@@ -51,16 +51,29 @@ class Event(models.Model):
 class Profile(models.Model):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    #Choices of degree
+    DEGREE = (
+        ('BTECH','B.Tech'),
+        ('MCA','MCA'),
+        ('MTECH','M.Tech'),
+    )
+
+    YEAR = (
+        ('1','First'),
+        ('2','Second'),
+        ('3','Third'),
+        ('4','Final'),
+    )
 
     alias = models.CharField(max_length=64, blank=True, null=True)
     image = models.ImageField(upload_to='member_images/', blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
     phone_number = models.CharField(max_length=14, blank=True, null=True)
 
-    degree_name = models.CharField(max_length = 64)
-    year_name = models.CharField(max_length = 16)
+    degree_name = models.CharField(max_length = 64, choices=DEGREE)
+    year_name = models.CharField(max_length = 16, choices=YEAR)
 
     def __str__(self):
         return self.first_name
