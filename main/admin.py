@@ -176,6 +176,7 @@ admin.site.register(Session, SessionAdmin)
 ## SessionAdmin code ends
 
 admin.site.register(models.Event, EventAdmin)
+admin.site.register(models.Project)
 admin.site.register(models.Profile)
 admin.site.register(models.ImageCard)
 admin.site.register(models.About)
