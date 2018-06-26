@@ -20,7 +20,6 @@ pip install django djangorestframework pillow django-ckeditor
 ### To run the project on local machine
 Inside project directory type
 ```shell
-python3 manage.py makemigrations
 python3 manage.py migrate
 python3 manage.py collectstatic
 python3 manage.py runserver
