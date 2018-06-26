@@ -10,10 +10,27 @@ class UserSerializer(serializers.ModelSerializer):
 
 class EventSerializer(serializers.ModelSerializer):
     """Event fields serializer"""
+    show_bool = serializers.SerializerMethodField('check_show')
+
+    def check_show(self,obj):     
+        if obj.show == False:
+            obj.identifier = None
+            obj.title = None
+            obj.id = None
+            obj.description = None
+            obj.venue = None
+            obj.url = None
+            obj.event_timing = None
+            obj.event_image = None
+            obj.status = None
+            return False
+
+        elif obj.show == True:
+            return True
+       
     class Meta:
         model = Event
-        fields = ('id','identifier','title','description','venue','url','event_timing','event_image','status')
-
+        fields = ('show_bool', 'id','identifier','title','description','venue','url','event_timing','event_image','status')
 
 class ProfileSerializer(serializers.ModelSerializer):
     """Profile serializer"""
