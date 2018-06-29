@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 #It will be changed in production server. So don't create a issue on it.
-SECRET_KEY = 'b3vw1ud2mjjp@-5li=b+an3d9cft6xvwb6jsb21&av-2^7y_@_'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', cast=bool)
