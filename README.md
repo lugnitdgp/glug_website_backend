@@ -21,6 +21,9 @@ For debian based distro, in virtual evironment terminal type
 pip install -r requirements.txt
 ```
 ### To run the project on local machine
+Create a PostgresSQL database.</br>
+Then `cp .env.example .env` and change `.env` file according to your need.
+
 Inside project directory type
 ```shell
 python3 manage.py migrate
