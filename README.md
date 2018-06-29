@@ -12,10 +12,13 @@ i.e `venv` or `pipenv`.
     - pillow 5.1.x
     - djangorestframework 3.8.x
     - django-ckeditor 5.5.x
+    - psycopg2 2.7.x
+    - python-decouple 3.1
+    - django-cors-headers 2.2.x
 
 For debian based distro, in virtual evironment terminal type
 ```shell
-pip install django djangorestframework pillow django-ckeditor
+pip install -r requirements.txt
 ```
 ### To run the project on local machine
 Inside project directory type
