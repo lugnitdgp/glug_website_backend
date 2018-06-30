@@ -1,13 +1,14 @@
 from django.contrib import admin
 from django.utils.html import format_html 
-# from main.models import Event, Profile, ImageCard
+from django.http import HttpResponseRedirect
 from main import models
 
 from django.contrib.admin.models import LogEntry, ADDITION, CHANGE, DELETION
 from django.utils.html import escape
-from django.urls import reverse, NoReverseMatch
+from django.urls import reverse, NoReverseMatch, path
 from django.contrib.auth.models import User
 from django.contrib.sessions.models import Session
+from django.contrib.contenttypes.models import ContentType
 
 class EventAdmin(admin.ModelAdmin):
     list_display = ['identifier','status','show','action_show']
@@ -33,10 +34,31 @@ class EventAdmin(admin.ModelAdmin):
             height='auto',
             )
         )
+    
+    #Overriding the get_urls() method to add custom urls
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path('toggle_show/<int:event_id>',
+            self.admin_site.admin_view(self.process_toggle),
+            name='toggle-show'),
+        ]
+        return custom_urls + urls
 
+    #Code For Toggle Button
+    def process_toggle(self, request, event_id):
+        event_obj = self.get_object(request, event_id)
+        event_obj.show = not event_obj.show
+        event_obj.save()
+        ct = ContentType.objects.get_for_model(event_obj)
+        return_url = reverse('admin:%s_%s_changelist'%(ct.app_label, ct.model))
+
+        return HttpResponseRedirect(return_url,{})
+
+    # Code to show the action button
     def action_show(self, obj):
-        print(obj.pk)
-        return format_html('<a class="button" href="#">Toggle Show</a>', pk=obj.pk)
+        return format_html('<a class="button" href="{}">Toggle Show</a>',
+        reverse('admin:toggle-show', args=[obj.pk]))
     
     action_show.allow_tags = True
     action_show.short_description = "Show On Site"
