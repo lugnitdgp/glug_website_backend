@@ -61,7 +61,7 @@ class EventAdmin(admin.ModelAdmin):
         reverse('admin:toggle-show', args=[obj.pk]))
     
     action_show.allow_tags = True
-    action_show.short_description = "Show On Site"
+    action_show.short_description = "Toggle Show"
 
 ### This Section Handels the Log Entry
 
