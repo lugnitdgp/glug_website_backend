@@ -9,7 +9,8 @@ class Post(models.Model):
     title = models.CharField(max_length=255)
     author_user = models.ForeignKey(User, on_delete=models.CASCADE)
     #Author's full name will be fatched from Profile model on main app
-    author_alternate_name = models.CharField(max_length=255, blank=True, null=True)
+    author_name = models.CharField(max_length=255, blank=True, null=True,
+    help_text="This will be shown in Blogs, If its not provided `username` of User will be used.")
 
     thumbnail_image = models.ImageField(upload_to='blog_tumbnails/', blank=True, null=True)
     content_body = RichTextField()
@@ -20,3 +21,11 @@ class Post(models.Model):
 
     def __str__(self):
         return self.identifier
+
+    def save(self, *args, **kwargs):
+        if not self.author_name:
+            self.author_name = self.author_user.username
+        if not self.date_to_show:
+            self.date_to_show = self.pub_date
+        
+        super().save(*args, **kwargs)

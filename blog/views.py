@@ -7,5 +7,5 @@ from blog import models
 class PostViewSet(viewsets.ModelViewSet):
     queryset = models.Post.objects.all()
     serializer_class = serializers.PostSerializers
-    lookup_field = 'identifier'
+    lookup_field = 'id'
     http_method_names = ['get']
