@@ -21,3 +21,14 @@ class PostSerializers(serializers.ModelSerializer):
     class Meta:
         model = models.Post
         fields = ('show_bool','id','title','author_name','thumbnail_image','content_body','date_to_show')
+
+
+class CommentSerializer():
+    blog_post_id = serializers.SerializerMethodField('get_blog_id')
+
+    def get_blog_id(self,obj):
+        return obj.post.id
+
+    class Meta:
+        model = models.Comment
+        fields = ('id','parent_id','blog_post_id','data')

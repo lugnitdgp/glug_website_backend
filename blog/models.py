@@ -29,3 +29,12 @@ class Post(models.Model):
             self.date_to_show = self.pub_date
         
         super().save(*args, **kwargs)
+
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    parent_id = models.SmallIntegerField(default=0)
+    data = models.TextField(max_length=1024)
+    
+    def __str__(self):
+        str_repr = self.data[:21] if (len(self.data) >= 22) else self.data
+        return str_repr
