@@ -68,6 +68,7 @@ class Profile(models.Model):
     )
 
     alias = models.CharField(max_length=64, blank=True, null=True)
+    bio = models.TextField(max_length=512, blank=True, null=True)
     image = models.ImageField(upload_to='member_images/', blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
     phone_number = models.CharField(max_length=14, blank=True, null=True)
