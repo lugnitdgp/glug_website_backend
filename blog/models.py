@@ -36,5 +36,5 @@ class Comment(models.Model):
     data = models.TextField(max_length=1024)
     
     def __str__(self):
-        str_repr = self.data[:21] if (len(self.data) >= 22) else self.data
+        str_repr = self.data[:31]+"..." if (len(self.data) >= 32) else self.data
         return str_repr
