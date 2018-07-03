@@ -23,7 +23,7 @@ class PostSerializers(serializers.ModelSerializer):
         fields = ('show_bool','id','title','author_name','thumbnail_image','content_body','date_to_show')
 
 
-class CommentSerializer():
+class CommentSerializer(serializers.ModelSerializer):
     blog_post_id = serializers.SerializerMethodField('get_blog_id')
 
     def get_blog_id(self,obj):
