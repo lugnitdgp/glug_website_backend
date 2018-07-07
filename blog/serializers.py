@@ -1,8 +1,21 @@
 from rest_framework import serializers
 from blog import models
 
+
+class CommentSerializer(serializers.ModelSerializer):
+    blog_post_id = serializers.SerializerMethodField('get_blog_id')
+
+    def get_blog_id(self,obj):
+        return obj.post.id
+
+    class Meta:
+        model = models.Comment
+        fields = ('id','parent_id','blog_post_id','data')
+
 class PostSerializers(serializers.ModelSerializer):
     show_bool = serializers.SerializerMethodField('check_show')
+    # related_name argument is used in model
+    comments = CommentSerializer(many=True, read_only=True)
 
     def check_show(self,obj):     
         if obj.show == False:
@@ -20,15 +33,4 @@ class PostSerializers(serializers.ModelSerializer):
             return True
     class Meta:
         model = models.Post
-        fields = ('show_bool','id','title','author_name','thumbnail_image','content_body','date_to_show')
-
-
-class CommentSerializer(serializers.ModelSerializer):
-    blog_post_id = serializers.SerializerMethodField('get_blog_id')
-
-    def get_blog_id(self,obj):
-        return obj.post.id
-
-    class Meta:
-        model = models.Comment
-        fields = ('id','parent_id','blog_post_id','data')
+        fields = ('show_bool','id','title','author_name','thumbnail_image','content_body','date_to_show','comments')

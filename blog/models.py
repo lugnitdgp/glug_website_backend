@@ -31,7 +31,7 @@ class Post(models.Model):
         super().save(*args, **kwargs)
 
 class Comment(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     parent_id = models.SmallIntegerField(default=0)
     data = models.TextField(max_length=1024)
     
