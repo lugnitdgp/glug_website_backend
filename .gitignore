@@ -22,3 +22,7 @@ db.json
 static/*
 ##
 dump.json
+##
+main/migrations/*
+##
+blog/migrations/*
