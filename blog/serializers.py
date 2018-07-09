@@ -3,14 +3,10 @@ from blog import models
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    blog_post_id = serializers.SerializerMethodField('get_blog_id')
-
-    def get_blog_id(self,obj):
-        return obj.post.id
 
     class Meta:
         model = models.Comment
-        fields = ('id','parent_id','blog_post_id','data')
+        fields = ('id','parent_id','post','data')
 
 class PostSerializers(serializers.ModelSerializer):
     show_bool = serializers.SerializerMethodField('check_show')
