@@ -6,7 +6,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Comment
-        fields = ('id','parent_id','post','data')
+        fields = ('id','parent_id','post','user_social_id','data')
 
 class PostSerializers(serializers.ModelSerializer):
     show_bool = serializers.SerializerMethodField('check_show')
