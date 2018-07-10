@@ -41,7 +41,7 @@ class EventAdmin(admin.ModelAdmin):
         custom_urls = [
             path('toggle_show/<int:event_id>',
             self.admin_site.admin_view(self.process_toggle),
-            name='toggle-show'),
+            name='toggle-event-show'),
         ]
         return custom_urls + urls
 
@@ -58,7 +58,7 @@ class EventAdmin(admin.ModelAdmin):
     # Code to show the action button
     def action_show(self, obj):
         return format_html('<a class="button" href="{}">Toggle Show</a>',
-        reverse('admin:toggle-show', args=[obj.pk]))
+        reverse('admin:toggle-event-show', args=[obj.pk]))
     
     action_show.allow_tags = True
     action_show.short_description = "Toggle Show"

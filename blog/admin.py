@@ -25,7 +25,7 @@ class PostAdmin(admin.ModelAdmin):
         custom_urls = [
             path('toggle_show/<int:post_id>',
             self.admin_site.admin_view(self.process_toggle),
-            name='toggle-show'),
+            name='toggle-post-show'),
         ]
         return custom_urls + urls
 
@@ -42,7 +42,7 @@ class PostAdmin(admin.ModelAdmin):
     # Code to show the action button
     def action_show(self, obj):
         return format_html('<a class="button" href="{}">Toggle Show</a>',
-        reverse('admin:toggle-show', args=[obj.pk]))
+        reverse('admin:toggle-post-show', args=[obj.pk]))
     
     action_show.allow_tags = True
     action_show.short_description = "Toggle Show"
