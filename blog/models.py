@@ -33,8 +33,10 @@ class Post(models.Model):
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     parent_id = models.SmallIntegerField(default=0)
+    user_name = models.CharField(max_length=255, null=True, blank=True)
+    dp_url = models.URLField(null=True, blank=True)
     data = models.TextField(max_length=1024)
     
     def __str__(self):
-        str_repr = self.data[:31]+"..." if (len(self.data) >= 32) else self.data
+        str_repr = self.data[:51]+"..." if (len(self.data) >= 52) else self.data
         return str_repr
