@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets, generics
 from django.contrib.auth.models import User
-from main.models import Event, Profile, About, Project, Contact
+from main.models import Event, Profile, About, Project, Contact, Activity
 from main import serializers
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponseRedirect
@@ -66,4 +66,9 @@ class ProjectViewSet(viewsets.ModelViewSet):
 class ContactViewSet(viewsets.ModelViewSet):
     queryset = Contact.objects.all()
     serializer_class = serializers.ContactSerializers
+    http_method_names = ['get']
+
+class ActivityViewSet(viewsets.ModelViewSet):
+    queryset = Activity.objects.all()
+    serializer_class = serializers.ActivitySerializers
     http_method_names = ['get']

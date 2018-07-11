@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from main.models import Event, Profile, About, Project, Contact
+from main.models import Event, Profile, About, Project, Contact, Activity
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -57,4 +57,9 @@ class ProjectSerializers(serializers.ModelSerializer):
 class ContactSerializers(serializers.ModelSerializer):
     class Meta:
         model = Contact
-        fields = ('id','name','email','phone_number','message')    
+        fields = ('id','name','email','phone_number','message')
+
+class ActivitySerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Activity
+        fields = ('title','description','image')

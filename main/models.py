@@ -109,3 +109,11 @@ class Contact(models.Model):
     email = models.EmailField()
     phone_number = models.CharField(max_length=14, blank=True, null=True)
     message = models.TextField(max_length=1024, blank=True, null=True)
+
+class Activity(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField(max_length=1024, blank=True, null=True)
+    image = models.ImageField(upload_to='activity_images/', blank=True, null=True)
+
+    def __str__(self):
+        return self.title
