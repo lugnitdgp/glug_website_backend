@@ -34,6 +34,7 @@ class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     parent_id = models.SmallIntegerField(default=0)
     user_social_id = models.CharField(max_length=255, null=True, blank=True)
+    user_social_name = models.CharField(max_length=255, null=True, blank=True)
     data = models.TextField(max_length=1024)
     
     def __str__(self):
