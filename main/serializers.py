@@ -47,7 +47,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 class AboutSerializer(serializers.ModelSerializer):
     class Meta:
         model = About
-        fields = ('identifier', 'content')
+        fields = ('identifier', 'heading', 'content')
 
 class ProjectSerializers(serializers.ModelSerializer):
     class Meta:

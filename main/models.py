@@ -91,6 +91,7 @@ class ImageCard(models.Model):
 
 class About(models.Model):
     identifier = models.CharField(max_length=64, unique=True)
+    heading = models.CharField(max_length=255, blank=True, null=True) #remove blank and null after test
     content = RichTextField()
 
     def __str__(self):
