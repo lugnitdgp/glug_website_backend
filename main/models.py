@@ -88,6 +88,9 @@ class ImageCard(models.Model):
     image = models.ImageField(upload_to='card_images/')
     cards_text = models.TextField(max_length=1024, blank=True, null=True)
 
+    def __str__(self):
+        return self.card_id
+
 
 class About(models.Model):
     identifier = models.CharField(max_length=64, unique=True)

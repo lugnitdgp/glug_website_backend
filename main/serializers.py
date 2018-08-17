@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from main.models import Event, Profile, About, Project, Contact, Activity
+from main.models import Event, Profile, About, Project, Contact, Activity, ImageCard
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -63,3 +63,8 @@ class ActivitySerializers(serializers.ModelSerializer):
     class Meta:
         model = Activity
         fields = ('title','description','image')
+
+class ImageCardSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = ImageCard
+        fields = ('card_id','image','cards_text')

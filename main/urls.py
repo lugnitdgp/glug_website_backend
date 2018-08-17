@@ -15,6 +15,7 @@ router.register(r'about', views.AboutViewSet)
 router.register(r'project', views.ProjectViewSet)
 router.register(r'contact', views.ContactViewSet)
 router.register(r'activity', views.ActivityViewSet)
+router.register(r'carousel', views.ImageCardViewSet)
 
 urlpatterns = router.urls
 
