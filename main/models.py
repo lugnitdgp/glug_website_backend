@@ -121,5 +121,8 @@ class Activity(models.Model):
     description = models.TextField(max_length=1024, blank=True, null=True)
     image = models.ImageField(upload_to='activity_images/', blank=True, null=True)
 
+    class Meta:
+        verbose_name_plural = "Activities"
+
     def __str__(self):
         return self.title

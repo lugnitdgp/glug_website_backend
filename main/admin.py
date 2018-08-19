@@ -10,6 +10,9 @@ from django.contrib.auth.models import User
 from django.contrib.sessions.models import Session
 from django.contrib.contenttypes.models import ContentType
 
+admin.site.site_header = "GLUG Backend | Admin Panel"
+admin.site.site_url = "http://nitdgplug.org/lugnitdgp-website/"
+
 class EventAdmin(admin.ModelAdmin):
     list_display = ['identifier','status','show','action_show']
     readonly_fields = ['event_image_preview']

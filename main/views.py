@@ -7,6 +7,7 @@ from main.forms import ProfileForm
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 def register(request):
     if request.method == "POST":
@@ -24,6 +25,10 @@ def register(request):
 
 @login_required
 def create_profile(request):
+    if Profile.objects.filter(user=request.user).exists():
+        messages.add_message(request, messages.INFO, 'A Profile already exists for user %s' % request.user.username)
+        return HttpResponseRedirect('/admin')
+
     if request.method == "POST":
         profile_form = ProfileForm(request.POST)
         if profile_form.is_valid():
