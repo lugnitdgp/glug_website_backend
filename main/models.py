@@ -74,11 +74,13 @@ class Profile(models.Model):
     phone_number = models.CharField(max_length=14, blank=True, null=True)
     degree_name = models.CharField(max_length = 64, choices=DEGREE)
     year_name = models.CharField(max_length = 16, choices=YEAR)
+    position = models.CharField(max_length=255, blank=True, null=True)
 
     git_link = models.URLField(null=True, blank=True)
     facebook_link = models.URLField(null=True, blank=True)
     twitter_link = models.URLField(null=True, blank=True)
     reddit_link = models.URLField(null=True, blank=True)
+    linkedin_link = models.URLField(null=True, blank=True)
 
     def __str__(self):
         return self.first_name
