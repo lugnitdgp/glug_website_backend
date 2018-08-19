@@ -6,6 +6,7 @@ from main import serializers
 from main.forms import ProfileForm
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 
 def register(request):
     if request.method == "POST":
@@ -21,11 +22,12 @@ def register(request):
         args = {'form':form,'profile_form':profile_form}
         return render(request, 'registration/register.html', args)
 
+@login_required
 def create_profile(request):
     if request.method == "POST":
         profile_form = ProfileForm(request.POST)
         if profile_form.is_valid():
-            profile_form.save()
+            profile_form.save(user_id=request.user.pk)
             return HttpResponseRedirect('/admin')
     else:
         profile_form = ProfileForm
