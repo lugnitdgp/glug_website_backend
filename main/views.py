@@ -3,19 +3,34 @@ from rest_framework import viewsets, generics
 from django.contrib.auth.models import User
 from main.models import Event, Profile, About, Project, Contact, Activity, ImageCard
 from main import serializers
+from main.forms import ProfileForm
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponseRedirect
 
 def register(request):
     if request.method == "POST":
         form = UserCreationForm(request.POST)
-        if form.is_valid():
+        profile_form = ProfileForm(request.POST)
+        if form.is_valid() and profile_form.is_valid():
             form.save()
+            profile_form.save()
             return HttpResponseRedirect('/admin')
     else:
         form = UserCreationForm
-        args = {'form':form}
+        profile_form = ProfileForm
+        args = {'form':form,'profile_form':profile_form}
         return render(request, 'registration/register.html', args)
+
+def create_profile(request):
+    if request.method == "POST":
+        profile_form = ProfileForm(request.POST)
+        if profile_form.is_valid():
+            profile_form.save()
+            return HttpResponseRedirect('/admin')
+    else:
+        profile_form = ProfileForm
+        args = {'profile_form':profile_form}
+        return render(request, 'profile/createprofile.html', args)
 
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()

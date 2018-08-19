@@ -23,4 +23,5 @@ urlpatterns += [
     path('users/', views.UserList.as_view(), name='userlist'),
     path('users/<slug:username>/', views.UserDetail.as_view(), name='userdetails'),
     path('accounts/register/', views.register, name='register'),
+    path('accounts/createprofile/', views.create_profile, name='createprofile'),
 ]
