@@ -14,7 +14,7 @@ class ProfileForm(ModelForm):
             'email',
             'phone_number',
             'degree_name',
-            'year_name',
+            'passout_year',
             'git_link',
             'facebook_link',
             'twitter_link',

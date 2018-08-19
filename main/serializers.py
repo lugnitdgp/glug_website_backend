@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from main.models import Event, Profile, About, Project, Contact, Activity, ImageCard
+import datetime
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -36,12 +37,20 @@ class ProfileSerializer(serializers.ModelSerializer):
     """Profile serializer"""
     # Using Metod field to get a field value of OnetoOneFiled
     user_name = serializers.SerializerMethodField('get_username')
+    year_name = serializers.SerializerMethodField('get_year')
+
+    def get_year(self, obj):
+        if(datetime.date.today().month > 6):
+            return (5-(obj.passout_year-datetime.date.today().year))
+        else:
+            return (5-(obj.passout_year-datetime.date.today().year)-1)
+
     def get_username(self, obj):
         return obj.user.username
 
     class Meta:
         model = Profile
-        fields = ('id', 'user_name','first_name','last_name','alias','position', 'email', 'image','degree_name','year_name','git_link', 'facebook_link', 'reddit_link','linkedin_link')
+        fields = ('id', 'user_name','first_name','last_name','alias','year_name','position', 'email', 'image','degree_name','git_link', 'facebook_link', 'reddit_link','linkedin_link')
 
 
 class AboutSerializer(serializers.ModelSerializer):

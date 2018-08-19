@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
+import datetime
 
 # Create your models here.
 class Event(models.Model):
@@ -47,6 +48,9 @@ class Event(models.Model):
         super().save(*args, **kwargs)
 
 
+def year_choices():
+    cuur_year = datetime.date.today().year
+    return [(y,y) for y in range(cuur_year,cuur_year+4+1)]
 
 class Profile(models.Model):
     first_name = models.CharField(max_length=255)
@@ -73,7 +77,8 @@ class Profile(models.Model):
     email = models.EmailField(blank=True, null=True)
     phone_number = models.CharField(max_length=14, blank=True, null=True)
     degree_name = models.CharField(max_length = 64, choices=DEGREE)
-    year_name = models.CharField(max_length = 16, choices=YEAR)
+    # year_name = models.CharField(max_length = 16, choices=YEAR)
+    passout_year = models.IntegerField(choices=year_choices(),default= 2018)
     position = models.CharField(max_length=255, blank=True, null=True)
 
     git_link = models.URLField(null=True, blank=True)
@@ -81,6 +86,7 @@ class Profile(models.Model):
     twitter_link = models.URLField(null=True, blank=True)
     reddit_link = models.URLField(null=True, blank=True)
     linkedin_link = models.URLField(null=True, blank=True)
+
 
     def __str__(self):
         return self.first_name
