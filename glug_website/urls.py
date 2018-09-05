@@ -24,7 +24,6 @@ urlpatterns = [
     path('api/', include('main.urls', namespace='main')),
     path('blog/', include('blog.urls', namespace='blog')),
     path('api-auth/', include('rest_framework.urls')),
-    path('api-token-auth/', views.obtain_auth_token),
 ]
 
 if settings.DEBUG:
