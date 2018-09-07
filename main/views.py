@@ -12,15 +12,12 @@ from django.contrib import messages
 def register(request):
     if request.method == "POST":
         form = UserCreationForm(request.POST)
-        profile_form = ProfileForm(request.POST)
-        if form.is_valid() and profile_form.is_valid():
+        if form.is_valid():
             form.save()
-            profile_form.save()
             return HttpResponseRedirect('/admin')
     else:
         form = UserCreationForm
-        profile_form = ProfileForm
-        args = {'form':form,'profile_form':profile_form}
+        args = {'form':form }
         return render(request, 'registration/register.html', args)
 
 @login_required
