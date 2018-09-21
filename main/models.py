@@ -132,3 +132,13 @@ class Activity(models.Model):
 
     def __str__(self):
         return self.title
+
+class Linit(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField(max_length=1024, blank=True, null=True)
+    image = models.ImageField(upload_to='linit_images/', blank=True, null=True)
+    year_edition = models.IntegerField(default=2018)
+    pdf = models.FileField(upload_to='linit_pdfs/', blank=True, null=True)
+
+    def __str__(self):
+        return self.title

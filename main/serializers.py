@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from main.models import Event, Profile, About, Project, Contact, Activity, ImageCard
+from main.models import Event, Profile, About, Project, Contact, Activity, ImageCard, Linit
 import datetime
 
 
@@ -77,3 +77,8 @@ class ImageCardSerializers(serializers.ModelSerializer):
     class Meta:
         model = ImageCard
         fields = ('card_id','image','cards_text')
+
+class LinitSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Linit
+        fields = ('title','description','image','year_edition','pdf')
