@@ -28,7 +28,7 @@ def create_profile(request):
         return HttpResponseRedirect(reverse('admin:index'))
 
     if request.method == "POST":
-        profile_form = ProfileForm(request.POST)
+        profile_form = ProfileForm(request.POST, request.FILES)
         if profile_form.is_valid():
             profile_form.save(user_id=request.user.pk)
             messages.add_message(request, messages.INFO, '%s, your Profile has been successfully created.' % request.user.username)
@@ -46,7 +46,7 @@ def change_profile(request):
 
     if request.method == "POST":
         profile_obj = Profile.objects.get(user=request.user)
-        profile_form = ProfileChangeForm(request.POST, instance = profile_obj)
+        profile_form = ProfileChangeForm(request.POST, request.FILES, instance = profile_obj)
         if profile_form.is_valid():
             profile_form.save(user_id=request.user.pk)
             messages.add_message(request, messages.INFO, '%s, your Profile has been successfully updated.' % request.user.username)

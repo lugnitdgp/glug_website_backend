@@ -24,7 +24,7 @@
         </ul>
         {% endif %}
         <h1> Member Profile Creation Page</h1>
-        <form class="form" method="POST">
+        <form class="form" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             {{ profile_form.as_p }}
             <button class="btn btn-primary" type="submit">Register</button>

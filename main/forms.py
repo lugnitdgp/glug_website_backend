@@ -50,8 +50,6 @@ class ProfileChangeForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProfileChangeForm, self).__init__(*args, **kwargs)
 
-        # for field in self.base_fields:
-        #         self.base_fields[field].initial = getattr(self.obj, field)
 
     def save(self, user_id ,commit=True,):
         profile = super(ProfileChangeForm, self).save(commit=False)
