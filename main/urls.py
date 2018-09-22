@@ -25,4 +25,5 @@ urlpatterns += [
     path('users/<slug:username>/', views.UserDetail.as_view(), name='userdetails'),
     path('accounts/register/', views.register, name='register'),
     path('accounts/createprofile/', views.create_profile, name='createprofile'),
+    path('accounts/changeprofile/', views.change_profile, name='changerofile'),
 ]

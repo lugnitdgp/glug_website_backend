@@ -28,3 +28,34 @@ class ProfileForm(ModelForm):
         if commit:
             profile.save()
         return profile
+
+class ProfileChangeForm(ModelForm):
+    class Meta:
+        model = Profile
+        fields = [
+            'first_name',
+            'last_name',
+            'image',
+            'bio',
+            'email',
+            'phone_number',
+            'degree_name',
+            'passout_year',
+            'git_link',
+            'facebook_link',
+            'twitter_link',
+            'linkedin_link',
+            'reddit_link'
+        ]
+    def __init__(self, *args, **kwargs):
+        super(ProfileChangeForm, self).__init__(*args, **kwargs)
+
+        # for field in self.base_fields:
+        #         self.base_fields[field].initial = getattr(self.obj, field)
+
+    def save(self, user_id ,commit=True,):
+        profile = super(ProfileChangeForm, self).save(commit=False)
+        profile.user = User.objects.get(pk=user_id)
+        if commit:
+            profile.save()
+        return profile
