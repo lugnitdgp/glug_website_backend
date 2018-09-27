@@ -91,13 +91,14 @@ class Profile(models.Model):
     def __str__(self):
         return self.first_name
 
-class ImageCard(models.Model):
-    card_id = models.CharField(max_length=64, unique=True)
+class CarouselImage(models.Model):
+    identifier = models.CharField(max_length=64, unique=True)
     image = models.ImageField(upload_to='card_images/')
-    cards_text = models.TextField(max_length=1024, blank=True, null=True)
+    heading = models.CharField(max_length=255, blank=True, null=True)
+    sub_heading = models.TextField(max_length=1024, blank=True, null=True)
 
     def __str__(self):
-        return self.card_id
+        return self.identifier
 
 
 class About(models.Model):

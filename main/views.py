@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets, generics
 from django.contrib.auth.models import User
-from main.models import Event, Profile, About, Project, Contact, Activity, ImageCard, Linit
+from main.models import Event, Profile, About, Project, Contact, Activity, CarouselImage, Linit
 from main import serializers
 from main.forms import ProfileForm, ProfileChangeForm
 from django.contrib.auth.forms import UserCreationForm
@@ -113,9 +113,9 @@ class ActivityViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ActivitySerializers
     http_method_names = ['get']
 
-class ImageCardViewSet(viewsets.ModelViewSet):
-    queryset = ImageCard.objects.all()
-    serializer_class = serializers.ImageCardSerializers
+class CarouselImageViewSet(viewsets.ModelViewSet):
+    queryset = CarouselImage.objects.all()
+    serializer_class = serializers.CarouselImageSerializers
     http_method_names = ['get']
 
 class LinitViewSet(viewsets.ModelViewSet):
