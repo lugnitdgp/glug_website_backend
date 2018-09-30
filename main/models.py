@@ -27,6 +27,7 @@ class Event(models.Model):
     venue = models.CharField(max_length=255, blank=True, null=True, help_text="Venue for Offline Events.")
     url = models.URLField(max_length=255, blank=True, null=True, help_text="URL for Online Events.")
     event_timing = models.DateTimeField(blank =True, null= True)
+    facebook_link = models.URLField(null=True, blank=True)
     pub_date = models.DateTimeField(auto_now=True)
     pub_by = models.CharField(max_length=255, blank=True, null=True)
     edited_by = models.CharField(max_length=255, blank=True, null=True)

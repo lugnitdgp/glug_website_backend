@@ -22,6 +22,7 @@ class EventSerializer(serializers.ModelSerializer):
             obj.venue = None
             obj.url = None
             obj.event_timing = None
+            obj.facebook_link = None
             obj.event_image = None
             obj.status = None
             return False
@@ -31,7 +32,7 @@ class EventSerializer(serializers.ModelSerializer):
        
     class Meta:
         model = Event
-        fields = ('show_bool', 'id','identifier','title','description','venue','url','event_timing','event_image','status')
+        fields = ('show_bool', 'id','identifier','title','description','venue','url','event_timing','facebook_link','event_image','status')
 
 class ProfileSerializer(serializers.ModelSerializer):
     """Profile serializer"""
