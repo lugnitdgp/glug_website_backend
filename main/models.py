@@ -5,9 +5,9 @@ from django.core.exceptions import ValidationError
 import datetime
 
 def validate_pdf_size(value):
-    limit = 50 * 1024 * 1024
+    limit = 100 * 1024 * 1024
     if value.size > limit:
-        raise ValidationError('File too large. Size should not exceed 50 MiB.')
+        raise ValidationError('File too large. Size should not exceed 100 MiB.')
 
 def validate_image_size(value):
     limit = 1 * 1024 * 1024
@@ -151,6 +151,7 @@ class Linit(models.Model):
     image = models.ImageField(upload_to='linit_images/', blank=True, null=True)
     year_edition = models.IntegerField(default=2018)
     pdf = models.FileField(upload_to='linit_pdfs/', blank=True, null=True, validators=[validate_pdf_size])
+    pdf_link = models.URLField(null=True, blank=True)
 
     def __str__(self):
         return self.title
