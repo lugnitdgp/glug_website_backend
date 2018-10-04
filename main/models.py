@@ -1,13 +1,24 @@
 from django.db import models
 from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
+from django.core.exceptions import ValidationError
 import datetime
+
+def validate_pdf_size(value):
+    limit = 50 * 1024 * 1024
+    if value.size > limit:
+        raise ValidationError('File too large. Size should not exceed 50 MiB.')
+
+def validate_image_size(value):
+    limit = 1 * 1024 * 1024
+    if value.size > limit:
+        raise ValidationError('File too large. Size should not exceed 1 MiB.')
 
 # Create your models here.
 class Event(models.Model):
     identifier = models.CharField(max_length = 64, unique=True, help_text="Unique Identifier for events")
     title = models.CharField(max_length = 255)
-    event_image = models.ImageField(upload_to='event_images/', null=True, blank=True)
+    event_image = models.ImageField(upload_to='event_images/', null=True, blank=True, validators=[validate_image_size])
     description = RichTextField(blank=True, null=True)
     
     #Choices of status
@@ -74,11 +85,10 @@ class Profile(models.Model):
 
     alias = models.CharField(max_length=64, blank=True, null=True)
     bio = models.TextField(max_length=512, blank=True, null=True)
-    image = models.ImageField(upload_to='member_images/', blank=True, null=True)
+    image = models.ImageField(upload_to='member_images/', blank=True, null=True, validators=[validate_image_size])
     email = models.EmailField(blank=True, null=True)
     phone_number = models.CharField(max_length=14, blank=True, null=True)
     degree_name = models.CharField(max_length = 64, choices=DEGREE)
-    # year_name = models.CharField(max_length = 16, choices=YEAR)
     passout_year = models.IntegerField(choices=year_choices(),default= 2018)
     position = models.CharField(max_length=255, blank=True, null=True)
 
@@ -94,7 +104,7 @@ class Profile(models.Model):
 
 class CarouselImage(models.Model):
     identifier = models.CharField(max_length=64, unique=True)
-    image = models.ImageField(upload_to='card_images/')
+    image = models.ImageField(upload_to='card_images/', validators=[validate_image_size])
     heading = models.CharField(max_length=255, blank=True, null=True)
     sub_heading = models.TextField(max_length=1024, blank=True, null=True)
 
@@ -127,7 +137,7 @@ class Contact(models.Model):
 class Activity(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(max_length=1024, blank=True, null=True)
-    image = models.ImageField(upload_to='activity_images/', blank=True, null=True)
+    image = models.ImageField(upload_to='activity_images/', blank=True, null=True, validators=[validate_image_size])
 
     class Meta:
         verbose_name_plural = "Activities"
@@ -140,7 +150,7 @@ class Linit(models.Model):
     description = models.TextField(max_length=1024, blank=True, null=True)
     image = models.ImageField(upload_to='linit_images/', blank=True, null=True)
     year_edition = models.IntegerField(default=2018)
-    pdf = models.FileField(upload_to='linit_pdfs/', blank=True, null=True)
+    pdf = models.FileField(upload_to='linit_pdfs/', blank=True, null=True, validators=[validate_pdf_size])
 
     def __str__(self):
         return self.title
