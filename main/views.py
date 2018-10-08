@@ -9,6 +9,10 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.urls import reverse, NoReverseMatch
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
+
 
 def register(request):
     if request.method == "POST":
@@ -56,6 +60,18 @@ def change_profile(request):
         profile_form = ProfileChangeForm(instance = profile_obj)
         args = {'profile_form':profile_form}
         return render(request, 'profile/changeprofile.html', args)
+
+
+class GetCount(APIView):
+    """Return count for Members, Events, and Projects"""
+    permission_classes = (AllowAny,)
+    def get(self, request, format=None):
+        members = len(Profile.objects.all())
+        events = len(Event.objects.all())
+        projects = len(Project.objects.all())
+
+        return Response({"members":members,"events":events,"projects":projects})
+
 
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()

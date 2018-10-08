@@ -26,4 +26,5 @@ urlpatterns += [
     path('accounts/register/', views.register, name='register'),
     path('accounts/createprofile/', views.create_profile, name='createprofile'),
     path('accounts/changeprofile/', views.change_profile, name='changerofile'),
+    path('get_count/', views.GetCount.as_view(), name="get_count"),
 ]
