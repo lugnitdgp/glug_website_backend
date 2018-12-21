@@ -1,6 +1,8 @@
 # GLUG Website Public Repo
 We are using django REST framework for backend api. <br />
-And Vue.js for frontend.
+And Vue.js for frontend. <br />
+
+#### Click [here](https://documenter.getpostman.com/view/5813355/RzZ7mzS4) to refer to the api documentation.
 
 ---
 Use a virtual envionment for installing this, 
