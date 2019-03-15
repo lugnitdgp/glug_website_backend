@@ -20,6 +20,10 @@ def register(request):
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('admin:index'))
+        else:
+            messages.add_message(request, messages.ERROR, 'Registration form validation error')
+            return HttpResponseRedirect(reverse('main:register'))
+
     else:
         form = UserCreationForm
         args = {'form':form }
