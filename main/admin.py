@@ -7,8 +7,10 @@ from django.contrib.admin.models import LogEntry, ADDITION, CHANGE, DELETION
 from django.utils.html import escape
 from django.urls import reverse, NoReverseMatch, path
 from django.contrib.auth.models import User
+from django.contrib.auth.admin import UserAdmin
 from django.contrib.sessions.models import Session
 from django.contrib.contenttypes.models import ContentType
+from django.utils.crypto import get_random_string
 
 admin.site.site_header = "GLUG Backend | Admin Panel"
 admin.site.site_url = "http://nitdgplug.org/"
@@ -199,6 +201,21 @@ class SessionAdmin(admin.ModelAdmin):
 
 admin.site.register(Session, SessionAdmin)
 ## SessionAdmin code ends
+
+class CustomUserAdmin(UserAdmin):
+    list_display = ('username','email', 'first_name', 'is_staff', )
+    actions = ['set_random_pass']
+
+    def set_random_pass(self, req, queryset):
+        for user in queryset:
+            password = User.objects.make_random_password()
+            user.set_password(password)
+            user.save()
+
+    set_random_pass.short_description = "Set random password"
+
+admin.site.unregister(User)
+admin.site.register(User, CustomUserAdmin)
 
 admin.site.register(models.Event, EventAdmin)
 admin.site.register(models.Project)
