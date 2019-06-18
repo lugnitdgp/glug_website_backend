@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 from main.models import Profile, SpecialToken
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.contrib.auth.forms import UserCreationForm
 
 class ProfileForm(ModelForm):
@@ -26,7 +26,12 @@ class ProfileForm(ModelForm):
     def save(self, user_id ,commit=True,):
         profile = super(ProfileForm, self).save(commit=False)
         profile.user = User.objects.get(pk=user_id)
+        # Add to a basic group when created
+        if Group.objects.filter(name='BlogAuthors').exists():
+            group = Group.objects.get(name='BlogAuthors')
+            profile.user.groups.add(group)
         if commit:
+            profile.user.save()
             profile.save()
         return profile
 

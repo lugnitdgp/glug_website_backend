@@ -14,6 +14,7 @@ from django.utils.crypto import get_random_string
 
 admin.site.site_header = "GLUG Backend | Admin Panel"
 admin.site.site_url = "http://nitdgplug.org/"
+admin.site.index_template = "admin/custom_index.html"
 
 class EventAdmin(admin.ModelAdmin):
     list_display = ['identifier','status','show','action_show']
@@ -70,7 +71,7 @@ class EventAdmin(admin.ModelAdmin):
 
 
 class SpecialTokenAdmin(admin.ModelAdmin):
-    list_display = ['name', 'value', 'used', 'valid_till']
+    list_display = ['name', 'value', 'used', 'max_usage','valid_till']
     readonly_fields = ['value', 'used']
 
 ### This Section Handels the Log Entry
@@ -208,7 +209,7 @@ admin.site.register(Session, SessionAdmin)
 ## SessionAdmin code ends
 
 class CustomUserAdmin(UserAdmin):
-    list_display = ('username','email', 'first_name', 'is_staff', )
+    list_display = ('username','email', 'is_staff', )
     actions = ['set_random_pass']
 
     def set_random_pass(self, req, queryset):
@@ -219,12 +220,15 @@ class CustomUserAdmin(UserAdmin):
 
     set_random_pass.short_description = "Set random password"
 
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ['first_name', 'user', 'email']
+
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
 
 admin.site.register(models.Event, EventAdmin)
 admin.site.register(models.Project)
-admin.site.register(models.Profile)
+admin.site.register(models.Profile, ProfileAdmin)
 admin.site.register(models.CarouselImage)
 admin.site.register(models.About)
 admin.site.register(models.Contact)
