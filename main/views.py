@@ -3,7 +3,7 @@ from rest_framework import viewsets, generics
 from django.contrib.auth.models import User
 from main.models import Event, Profile, About, Project, Contact, Activity, CarouselImage, Linit
 from main import serializers
-from main.forms import ProfileForm, ProfileChangeForm
+from main.forms import ProfileForm, ProfileChangeForm, MemberRegistrationForm
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
@@ -16,18 +16,18 @@ from rest_framework.permissions import AllowAny
 
 def register(request):
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
+        # form = UserCreationForm(request.POST)
+        form = MemberRegistrationForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            user.is_staff = True
+            user.save()
             return HttpResponseRedirect(reverse('admin:index'))
-        else:
-            messages.add_message(request, messages.ERROR, 'Registration form validation error')
-            return HttpResponseRedirect(reverse('main:register'))
-
     else:
-        form = UserCreationForm
-        args = {'form':form }
-        return render(request, 'registration/register.html', args)
+        form = MemberRegistrationForm
+    args = {'form':form }
+    return render(request, 'registration/register.html', args)
+
 
 @login_required
 def create_profile(request):

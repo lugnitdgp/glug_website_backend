@@ -1,7 +1,8 @@
 from django import forms
 from django.forms import ModelForm
-from main.models import Profile
+from main.models import Profile, SpecialToken
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 
 class ProfileForm(ModelForm):
     class Meta:
@@ -57,3 +58,30 @@ class ProfileChangeForm(ModelForm):
         if commit:
             profile.save()
         return profile
+
+
+class MemberRegistrationForm(UserCreationForm):
+    token = forms.CharField(label="Member Token", max_length=16)
+
+    class Meta:
+        model = User
+        fields = ['token', 'username']
+
+    def clean_token(self):
+        token = self.cleaned_data['token']
+        if SpecialToken.objects.filter(value=token).exists():
+            _token = SpecialToken.objects.get(value=token)
+            if _token.is_valid():
+                _token.used += 1
+                _token.save()
+                return token
+            else:
+                raise forms.ValidationError("Token Expired")
+        else:
+            raise forms.ValidationError("Invalid Token")
+
+    def save(self, commit=True):
+        user = super(MemberRegistrationForm, self).save(commit=False)
+        if commit:
+            user.save()
+        return user

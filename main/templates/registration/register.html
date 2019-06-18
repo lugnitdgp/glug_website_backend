@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -17,6 +16,17 @@
 
     <div class="container">
         <h1> Member Registration Page</h1>
+        {% if form.errors %}
+            {% if form.errors.items|length == 1 %}
+                <div class="alert alert-warning" role="alert">
+                    Please correct the error below
+                </div>
+            {% else %}
+                <div class="alert alert-warning" role="alert">
+                    Please correct the errors below
+                </div>
+            {% endif %}
+        {% endif %}
         <form class="form" method="POST">
             {% csrf_token %}
             {{ form.as_p }}
