@@ -70,7 +70,7 @@ class EventAdmin(admin.ModelAdmin):
 
 
 class SpecialTokenAdmin(admin.ModelAdmin):
-    list_display = ['name', 'used', 'valid_till']
+    list_display = ['name', 'value', 'used', 'valid_till']
     readonly_fields = ['value', 'used']
 
 ### This Section Handels the Log Entry

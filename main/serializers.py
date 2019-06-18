@@ -41,7 +41,8 @@ class ProfileSerializer(serializers.ModelSerializer):
     year_name = serializers.SerializerMethodField('get_year')
 
     def get_year(self, obj):
-        if(datetime.date.today().month > 6):
+        # After Month May(5) a academic year changes
+        if(datetime.date.today().month > 5):
             return (5-(obj.passout_year-datetime.date.today().year))
         else:
             return (5-(obj.passout_year-datetime.date.today().year)-1)
