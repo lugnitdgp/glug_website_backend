@@ -68,6 +68,11 @@ class EventAdmin(admin.ModelAdmin):
     action_show.allow_tags = True
     action_show.short_description = "Toggle Show"
 
+
+class SpecialTokenAdmin(admin.ModelAdmin):
+    list_display = ['name', 'used', 'valid_till']
+    readonly_fields = ['value', 'used']
+
 ### This Section Handels the Log Entry
 
 action_names = {
@@ -225,3 +230,4 @@ admin.site.register(models.About)
 admin.site.register(models.Contact)
 admin.site.register(models.Activity)
 admin.site.register(models.Linit)
+admin.site.register(models.SpecialToken, SpecialTokenAdmin)

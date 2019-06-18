@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
 from django.core.exceptions import ValidationError
+from django.utils.crypto import get_random_string
 import datetime
 
 def validate_pdf_size(value):
@@ -155,3 +156,30 @@ class Linit(models.Model):
 
     def __str__(self):
         return self.title
+
+class SpecialToken(models.Model):
+    name = models.CharField(max_length=255)
+    value = models.CharField(max_length=16)
+    used = models.SmallIntegerField(default=0)
+    max_usage = models.IntegerField(default=1)
+    valid_till = models.DateTimeField()
+
+    def is_valid(self):
+        t_now = datetime.datetime.now()
+        if self.used < max_usage and t_now < self.valid_till:
+            return True
+        return False
+
+    def set_valid_default(self):
+        return datetime.datetime.now() + datetime.timedelta(hours=6)
+
+    def save(self, *args, **kwargs):
+        if not self.valid_till:
+            self.valid_till = self.set_valid_default()
+
+        if not self.value:
+            self.value = get_random_string(16)
+        return super(SpecialToken, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
