@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from main.models import Event, Profile, About, Project, Contact, Activity, CarouselImage, Linit
+from main.models import Event, Profile, About, Project, Contact, Activity, CarouselImage, Linit, Timeline
 import datetime
 
 
@@ -9,11 +9,12 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'username', 'email', 'is_staff')
 
+
 class EventSerializer(serializers.ModelSerializer):
     """Event fields serializer"""
     show_bool = serializers.SerializerMethodField('check_show')
 
-    def check_show(self,obj):     
+    def check_show(self, obj):
         if obj.show == False:
             obj.identifier = None
             obj.title = None
@@ -29,10 +30,12 @@ class EventSerializer(serializers.ModelSerializer):
 
         elif obj.show == True:
             return True
-       
+
     class Meta:
         model = Event
-        fields = ('show_bool', 'id','identifier','title','description','venue','url','event_timing','facebook_link','event_image','status')
+        fields = ('show_bool', 'id', 'identifier', 'title', 'description', 'venue',
+                  'url', 'event_timing', 'facebook_link', 'event_image', 'status')
+
 
 class ProfileSerializer(serializers.ModelSerializer):
     """Profile serializer"""
@@ -52,7 +55,8 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ('id', 'user_name','first_name','last_name','alias','bio','year_name','position', 'email', 'image','degree_name','git_link', 'facebook_link', 'reddit_link','linkedin_link')
+        fields = ('id', 'user_name', 'first_name', 'last_name', 'alias', 'bio', 'year_name', 'position',
+                  'email', 'image', 'degree_name', 'git_link', 'facebook_link', 'reddit_link', 'linkedin_link')
 
 
 class AboutSerializer(serializers.ModelSerializer):
@@ -60,27 +64,38 @@ class AboutSerializer(serializers.ModelSerializer):
         model = About
         fields = ('identifier', 'heading', 'content')
 
+
 class ProjectSerializers(serializers.ModelSerializer):
     class Meta:
         model = Project
-        fields = ('identifier','title','description','gitlink')
+        fields = ('identifier', 'title', 'description', 'gitlink')
+
 
 class ContactSerializers(serializers.ModelSerializer):
     class Meta:
         model = Contact
-        fields = ('id','name','email','phone_number','message')
+        fields = ('id', 'name', 'email', 'phone_number', 'message')
+
 
 class ActivitySerializers(serializers.ModelSerializer):
     class Meta:
         model = Activity
-        fields = ('title','description','image')
+        fields = ('title', 'description', 'image')
+
 
 class CarouselImageSerializers(serializers.ModelSerializer):
     class Meta:
         model = CarouselImage
-        fields = ('identifier','image','heading','sub_heading')
+        fields = ('identifier', 'image', 'heading', 'sub_heading')
+
 
 class LinitSerializers(serializers.ModelSerializer):
     class Meta:
         model = Linit
-        fields = ('title','description','image','year_edition','pdf')
+        fields = ('title', 'description', 'image', 'year_edition', 'pdf')
+
+
+class TimelineSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Timeline
+        fields = '__all__'
