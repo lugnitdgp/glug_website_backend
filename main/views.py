@@ -165,4 +165,4 @@ class LinitViewSet(viewsets.ModelViewSet):
 class TimelineViewSet(viewsets.ModelViewSet):
     queryset = Timeline.objects.all().order_by('-id')
     serializer_class = serializers.TimelineSerializers
-    http_method_names = ['get', 'post']
+    http_method_names = ['get']
