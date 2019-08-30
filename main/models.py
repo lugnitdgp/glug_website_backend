@@ -55,6 +55,8 @@ class Event(models.Model):
     edited_by = models.CharField(max_length=255, blank=True, null=True)
     status = models.CharField(max_length=64, choices=STATUS)
     show = models.BooleanField(default=True)
+    add_to_timeline = models.BooleanField(
+        default=False, help_text="To add to timeline.")
 
     def __str__(self):
         return self.identifier
@@ -69,6 +71,10 @@ class Event(models.Model):
         if self.event_type == "ONLINE":
             self.venue = None
         super().save(*args, **kwargs)
+
+        if(self.add_to_timeline == True):
+            x = Timeline(event_name=self.title, detail=self.description)
+            x.save()
 
 
 def year_choices():
@@ -203,7 +209,7 @@ class SpecialToken(models.Model):
 
 
 class Timeline(models.Model):
-    event_name = models.CharField(max_length=255)
+    event_name = models.CharField(max_length=120)
     detail = RichTextField()
     event_time = models.DateField(auto_now=True)
 
