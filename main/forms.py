@@ -4,6 +4,7 @@ from main.models import Profile, SpecialToken
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.forms import UserCreationForm
 
+
 class ProfileForm(ModelForm):
     class Meta:
         model = Profile
@@ -22,8 +23,8 @@ class ProfileForm(ModelForm):
             'linkedin_link',
             'reddit_link'
         ]
-    
-    def save(self, user_id ,commit=True,):
+
+    def save(self, user_id, commit=True,):
         profile = super(ProfileForm, self).save(commit=False)
         profile.user = User.objects.get(pk=user_id)
         # Add to a basic group when created
@@ -34,6 +35,7 @@ class ProfileForm(ModelForm):
             profile.user.save()
             profile.save()
         return profile
+
 
 class ProfileChangeForm(ModelForm):
     class Meta:
@@ -53,11 +55,11 @@ class ProfileChangeForm(ModelForm):
             'linkedin_link',
             'reddit_link'
         ]
+
     def __init__(self, *args, **kwargs):
         super(ProfileChangeForm, self).__init__(*args, **kwargs)
 
-
-    def save(self, user_id ,commit=True,):
+    def save(self, user_id, commit=True,):
         profile = super(ProfileChangeForm, self).save(commit=False)
         profile.user = User.objects.get(pk=user_id)
         if commit:

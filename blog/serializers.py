@@ -6,14 +6,16 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Comment
-        fields = ('id','parent_id','post','user_social_id','user_social_name','data')
+        fields = ('id', 'parent_id', 'post', 'user_social_id',
+                  'user_social_name', 'data')
+
 
 class PostSerializers(serializers.ModelSerializer):
     show_bool = serializers.SerializerMethodField('check_show')
     # related_name argument is used in model
     comments = CommentSerializer(many=True, read_only=True)
 
-    def check_show(self,obj):     
+    def check_show(self, obj):
         if obj.show == False:
             obj.identifier = None
             obj.id = None
@@ -27,6 +29,8 @@ class PostSerializers(serializers.ModelSerializer):
 
         elif obj.show == True:
             return True
+
     class Meta:
         model = models.Post
-        fields = ('show_bool','id','title','author_name','thumbnail_image','content_body','date_to_show','comments')
+        fields = ('show_bool', 'id', 'title', 'author_name',
+                  'thumbnail_image', 'content_body', 'date_to_show', 'comments')

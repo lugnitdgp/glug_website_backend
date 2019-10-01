@@ -8,11 +8,12 @@ class Post(models.Model):
     featured = models.BooleanField(default=False)
     title = models.CharField(max_length=255)
     author_user = models.ForeignKey(User, on_delete=models.CASCADE)
-    #Author's full name will be fatched from Profile model on main app
+    # Author's full name will be fatched from Profile model on main app
     author_name = models.CharField(max_length=255, blank=True, null=True,
-    help_text="This will be shown in Blogs, If its not provided `username` of User will be used.")
+                                   help_text="This will be shown in Blogs, If its not provided `username` of User will be used.")
 
-    thumbnail_image = models.ImageField(upload_to='blog_tumbnails/', blank=True, null=True)
+    thumbnail_image = models.ImageField(
+        upload_to='blog_tumbnails/', blank=True, null=True)
     content_body = RichTextField()
 
     pub_date = models.DateTimeField(auto_now_add=True)
@@ -27,16 +28,19 @@ class Post(models.Model):
             self.author_name = self.author_user.username
         if not self.date_to_show:
             self.date_to_show = self.pub_date
-        
+
         super().save(*args, **kwargs)
 
+
 class Comment(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    post = models.ForeignKey(
+        Post, on_delete=models.CASCADE, related_name='comments')
     parent_id = models.SmallIntegerField(default=0)
     user_social_id = models.CharField(max_length=255, null=True, blank=True)
     user_social_name = models.CharField(max_length=255, null=True, blank=True)
     data = models.TextField(max_length=1024)
-    
+
     def __str__(self):
-        str_repr = self.data[:51]+"..." if (len(self.data) >= 52) else self.data
+        str_repr = self.data[:51] + \
+            "..." if (len(self.data) >= 52) else self.data
         return str_repr
