@@ -184,6 +184,10 @@ class Linit(models.Model):
 
 
 class SpecialToken(models.Model):
+    """This is intended for special use cases,
+        where a feature needs to be an
+        'members only' feature"""
+
     name = models.CharField(max_length=255)
     value = models.CharField(max_length=16)
     used = models.SmallIntegerField(default=0)
