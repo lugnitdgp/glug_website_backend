@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.utils.html import format_html 
+from django.utils.html import format_html
 from django.http import HttpResponseRedirect
 from main import models
 
@@ -16,65 +16,67 @@ admin.site.site_header = "GLUG Backend | Admin Panel"
 admin.site.site_url = "http://nitdgplug.org/"
 admin.site.index_template = "admin/custom_index.html"
 
-class EventAdmin(admin.ModelAdmin):
-    list_display = ['identifier','status','show','action_show']
-    readonly_fields = ['event_image_preview']
-    actions = ['mark_draft','mark_final']
 
+class EventAdmin(admin.ModelAdmin):
+    list_display = ['identifier', 'status', 'show', 'action_show']
+    readonly_fields = ['event_image_preview']
+    actions = ['mark_draft', 'mark_final']
 
     def mark_draft(self, req, queryset):
         queryset.update(status="DRAFT")
-    
+
     mark_draft.short_description = "Mark Event Data as Draft"
 
     def mark_final(self, req, queryset):
         queryset.update(status="FINAL")
-    
+
     mark_final.short_description = "Mark Event Data as Final"
 
     def event_image_preview(self, obj):
         return format_html(
             '<img src="{url}" width="{width}" height={height} />'.format(
-            url = obj.event_image.url,
-            width='450px',
-            height='auto',
+                url=obj.event_image.url,
+                width='450px',
+                height='auto',
             )
         )
-    
-    #Overriding the get_urls() method to add custom urls
+
+    # Overriding the get_urls() method to add custom urls
     def get_urls(self):
         urls = super().get_urls()
         custom_urls = [
             path('toggle_show/<int:event_id>',
-            self.admin_site.admin_view(self.process_toggle),
-            name='toggle-event-show'),
+                 self.admin_site.admin_view(self.process_toggle),
+                 name='toggle-event-show'),
         ]
         return custom_urls + urls
 
-    #Code For Toggle Button
+    # Code For Toggle Button
     def process_toggle(self, request, event_id):
         event_obj = self.get_object(request, event_id)
         event_obj.show = not event_obj.show
         event_obj.save()
         ct = ContentType.objects.get_for_model(event_obj)
-        return_url = reverse('admin:%s_%s_changelist'%(ct.app_label, ct.model))
+        return_url = reverse('admin:%s_%s_changelist' %
+                             (ct.app_label, ct.model))
 
-        return HttpResponseRedirect(return_url,{})
+        return HttpResponseRedirect(return_url, {})
 
     # Code to show the action button
     def action_show(self, obj):
         return format_html('<a class="button" href="{}">Toggle Show</a>',
-        reverse('admin:toggle-event-show', args=[obj.pk]))
-    
+                           reverse('admin:toggle-event-show', args=[obj.pk]))
+
     action_show.allow_tags = True
     action_show.short_description = "Toggle Show"
 
 
 class SpecialTokenAdmin(admin.ModelAdmin):
-    list_display = ['name', 'value', 'used', 'max_usage','valid_till']
+    list_display = ['name', 'value', 'used', 'max_usage', 'valid_till']
     readonly_fields = ['value', 'used']
 
-### This Section Handels the Log Entry
+# This Section Handels the Log Entry
+
 
 action_names = {
     ADDITION: 'Addition',
@@ -82,15 +84,18 @@ action_names = {
     DELETION: 'Deletion',
 }
 
+
 class FilterBase(admin.SimpleListFilter):
     def queryset(self, request, queryset):
         if self.value():
             dictionary = dict(((self.parameter_name, self.value()),))
             return queryset.filter(**dictionary)
 
+
 class ActionFilter(FilterBase):
     title = 'action'
     parameter_name = 'action_flag'
+
     def lookups(self, request, model_admin):
         return action_names.items()
 
@@ -99,21 +104,25 @@ class UserFilter(FilterBase):
     """Use this filter to only show current users, who appear in the log."""
     title = 'user'
     parameter_name = 'user_id'
+
     def lookups(self, request, model_admin):
         return tuple((u.id, u.username)
-            for u in User.objects.filter(pk__in =
-                LogEntry.objects.values_list('user_id').distinct())
-        )
+                     for u in User.objects.filter(pk__in=LogEntry.objects.values_list('user_id').distinct())
+                     )
+
 
 class AdminFilter(UserFilter):
     """Use this filter to only show current Superusers."""
     title = 'admin'
+
     def lookups(self, request, model_admin):
         return tuple((u.id, u.username) for u in User.objects.filter(is_superuser=True))
+
 
 class StaffFilter(UserFilter):
     """Use this filter to only show current Staff members."""
     title = 'staff'
+
     def lookups(self, request, model_admin):
         return tuple((u.id, u.username) for u in User.objects.filter(is_staff=True))
 
@@ -122,7 +131,7 @@ class LogEntryAdmin(admin.ModelAdmin):
 
     date_hierarchy = 'action_time'
 
-    readonly_fields = [ f.name for f in LogEntry._meta.get_fields()]
+    readonly_fields = [f.name for f in LogEntry._meta.get_fields()]
 
     list_filter = [
         UserFilter,
@@ -135,7 +144,6 @@ class LogEntryAdmin(admin.ModelAdmin):
         'object_repr',
         'change_message'
     ]
-
 
     list_display = [
         'action_time',
@@ -159,7 +167,8 @@ class LogEntryAdmin(admin.ModelAdmin):
         ct = obj.content_type
         repr_ = escape(obj.object_repr)
         try:
-            href = reverse('admin:%s_%s_change' % (ct.app_label, ct.model), args=[obj.object_id])
+            href = reverse('admin:%s_%s_change' %
+                           (ct.app_label, ct.model), args=[obj.object_id])
             link = '<a href="%s">%s</a>' % (href, repr_)
         except NoReverseMatch:
             link = repr_
@@ -178,9 +187,11 @@ class LogEntryAdmin(admin.ModelAdmin):
 
 
 admin.site.register(LogEntry, LogEntryAdmin)
-## Logentry code Ends
+# Logentry code Ends
 
-## Session Admin code starts
+# Session Admin code starts
+
+
 class SessionAdmin(admin.ModelAdmin):
     def _session_data(self, obj):
         return obj.get_decoded()
@@ -206,10 +217,11 @@ class SessionAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Session, SessionAdmin)
-## SessionAdmin code ends
+# SessionAdmin code ends
+
 
 class CustomUserAdmin(UserAdmin):
-    list_display = ('username','email', 'is_staff', )
+    list_display = ('username', 'email', 'is_staff', )
     actions = ['set_random_pass']
 
     def set_random_pass(self, req, queryset):
@@ -220,8 +232,10 @@ class CustomUserAdmin(UserAdmin):
 
     set_random_pass.short_description = "Set random password"
 
+
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ['first_name', 'user', 'email']
+
 
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
@@ -234,4 +248,5 @@ admin.site.register(models.About)
 admin.site.register(models.Contact)
 admin.site.register(models.Activity)
 admin.site.register(models.Linit)
+admin.site.register(models.Timeline)
 admin.site.register(models.SpecialToken, SpecialTokenAdmin)

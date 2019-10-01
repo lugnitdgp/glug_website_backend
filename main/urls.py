@@ -4,7 +4,7 @@ from . import views
 # from django.contrib.auth import views as auth_views
 
 
-#AppName 
+# AppName
 app_name = 'main'
 
 router = routers.DefaultRouter()
@@ -17,6 +17,7 @@ router.register(r'contact', views.ContactViewSet)
 router.register(r'activity', views.ActivityViewSet)
 router.register(r'carousel', views.CarouselImageViewSet)
 router.register(r'linit', views.LinitViewSet)
+router.register(r'timeline', views.TimelineViewSet)
 
 urlpatterns = router.urls
 
