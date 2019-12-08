@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'main',
     'corsheaders',
     'blog',
+    'mailer',
 ]
 
 MIDDLEWARE = [
@@ -94,7 +95,7 @@ WSGI_APPLICATION = 'glug_website.wsgi.application'
 # }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': config('DB_NAME'),
         'USER': config('DB_USER'),
         'PASSWORD': config('DB_PASSWORD'),
@@ -165,3 +166,10 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 LOGIN_URL ='/admin/login/'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = config('EMAIL_HOST', default='smtp.sendgrid.net')
+EMAIL_PORT = config('EMAIL_PORT', default=587)
+EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='None')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='None')
+EMAIL_USE_TLS = True

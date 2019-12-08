@@ -27,3 +27,5 @@ dump.json
 main/migrations/00*
 ##
 blog/migrations/00*
+##
+mailer/migrations/00*

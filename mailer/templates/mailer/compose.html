@@ -2,11 +2,58 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Compose An E-mail</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdn.ckeditor.com/ckeditor5/16.0.0/classic/ckeditor.js"></script>
+    <style>
+        .ck-editor__editable_inline {
+            min-height: 30vh;
+        }
+        li {
+            margin-top: 1em;
+        }
+        button {
+            margin-top: 2em;
+        }
+        .compose-box {
+            padding-left: 3em;
+            padding-right: 3em;
+            padding-top: 1.5em;
+            padding-bottom: 1.5em;
+            margin-top: 1em;
+            margin-bottom: 1em;
+        }
+    </style>
 </head>
 <body>
-    
+    <div class="compose-box container z-depth-2">
+        <h2>Compose your mail</h2>
+        <form action="{{ '/mail/send/' }}" method="post">
+            <ul>
+            {% csrf_token %}
+            {{ form.as_ul }}
+            <button class="btn waves-effect waves-light" type="submit" name="action">Send
+                <i class="material-icons right">send</i>
+            </button>
+            </ul>
+        </form>
+    </div>
+
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#editor'), {
+            toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote'],
+            width: ['50vw'],
+            height: ['30vh'],
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
 </html>
