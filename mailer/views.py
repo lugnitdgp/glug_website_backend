@@ -1,10 +1,19 @@
 from django.shortcuts import render
 from mailer.forms import MailComposeForm
+from mailer.models import MailSent
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.mail import EmailMultiAlternatives
+from django.contrib import messages
+from django.urls import reverse
+from django.utils import timezone
 
 from html2text import html2text
+
+@login_required
+def index(req):
+    history = MailSent.objects.all()
+    return render(req, 'mailer/index.html',{'history':history})
 
 @login_required
 def compose_mail(req):
@@ -28,7 +37,13 @@ def send_mail(req):
         msg.attach_alternative(html_msg, "text/html")
         msg.send()
 
-        return HttpResponse("Email sent succesfully.")
+        # log the sent email
+        m = MailSent(subject= subject, body=text_msg, from_email=from_email, to=to, sent_by=req.user, time=timezone.now())
+        m.save()
+
+        messages.add_message(
+            req, messages.SUCCESS, 'Email successfully sent')
+        return HttpResponseRedirect('/mail/compose/')
 
     else:
         form = MailComposeForm()
