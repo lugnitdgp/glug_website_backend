@@ -8,6 +8,7 @@
     <title>Compose An E-mail</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <script src="https://cdn.ckeditor.com/ckeditor5/16.0.0/classic/ckeditor.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <style>
         .ck-editor__editable_inline {
             min-height: 30vh;
@@ -29,13 +30,21 @@
     </style>
 </head>
 <body>
+    {% if messages %}
+    <ul class="alert alert-info messages">
+        {% for message in messages %}
+        <!-- <li{% if message.tags %} class="{{ message.tags }}" {% endif %}></li> -->
+          <script>M.toast({ html: '{{ message }}' })</script>
+        {% endfor %}
+    </ul>
+    {% endif %}
     <div class="compose-box container z-depth-2">
         <h2>Compose your mail</h2>
         <form action="{{ '/mail/send/' }}" method="post">
             <ul>
             {% csrf_token %}
             {{ form.as_ul }}
-            <button class="btn waves-effect waves-light" type="submit" name="action">Send
+            <button class="btn waves-effect waves-light orange" type="submit" name="action">Send
                 <i class="material-icons right">send</i>
             </button>
             </ul>
@@ -54,6 +63,5 @@
             });
         
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
 </html>
