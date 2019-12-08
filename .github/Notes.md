@@ -1,0 +1,3 @@
+# Notes
+
+### Mailer App Configuration
