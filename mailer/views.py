@@ -40,15 +40,16 @@ def send_mail(req):
         html_msg = body
         text_msg = html2text(body)
         from_email = 'no-reply@nitdgplug.org'
+        to = to.split(",")
 
-        msg = EmailMultiAlternatives(subject, text_msg, from_email, [to])
+        msg = EmailMultiAlternatives(subject, text_msg, from_email, to)
         msg.attach_alternative(html_msg, "text/html")
 
         try:
             msg.send()
 
             # log the sent email
-            m = MailSent(subject= subject, body=text_msg, from_email=from_email, to=to, sent_by=req.user, time=timezone.now())
+            m = MailSent(subject= subject, body=text_msg, from_email=from_email, to=str(to), sent_by=req.user, time=timezone.now())
             m.save()
 
             messages.add_message(
