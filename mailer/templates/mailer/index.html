@@ -29,6 +29,11 @@
 
 <body>
     <div class="container">
+        {% if not check %}
+            <div class="conatiner-fluid card-panel red">
+                <h6>E-mail client is not configured properly. Contact Admin.</h6>
+            </div>
+        {% endif %}
         <h2>Mailer</h2>
         <div class="container-fluid">
             <a class="btn-floating btn-large waves-effect waves-light orange" href = "{{ '/mail/send/' }}" ><i class="material-icons">add</i></a>
