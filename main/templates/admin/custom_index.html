@@ -19,6 +19,11 @@
             <td> | </td>
             <td scope="row"><a href="{% url 'main:changerofile' %}">Update Profile</a></td>
         </tr>
+    </br>
+        {% trans "Admin apps : " %}
+        <tr>
+            <th scope="row"><a href="{% url 'mailer:index' %}">Mailer app</a></th>
+        </tr>
     </div>
 
     {% if app_list %}
