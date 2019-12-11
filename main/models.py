@@ -215,7 +215,12 @@ class SpecialToken(models.Model):
 class Timeline(models.Model):
     event_name = models.CharField(max_length=120)
     detail = RichTextField()
-    event_time = models.DateField(auto_now=True)
+    event_time = models.DateField(blank=True)
 
     def __str__(self):
         return self.event_name
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.event_time = timezone.now()
+        return super(Timeline, self).save(*args, **kwargs)
