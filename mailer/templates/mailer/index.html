@@ -24,10 +24,22 @@
            padding-top: 0.1em;
            padding-bottom: 0.002em;
        }
+       .back {
+            margin: 1em;
+        }
+        .back-text {
+            display: inline;
+            font-size: 1.5em;
+       }
     </style>
 </head>
 
 <body>
+    <div class="container-fluid back">
+        <a class="btn-floating btn-large waves-effect waves-light orange" href="{% url 'admin:index' %}"><i
+                class="material-icons">arrow_back</i></a>
+        <p class="back-text">Go back to Admin</p>
+    </div>
     <div class="container">
         {% if not check %}
             <div class="conatiner-fluid card-panel red">
