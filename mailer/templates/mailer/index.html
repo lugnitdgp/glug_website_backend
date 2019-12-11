@@ -50,7 +50,7 @@
                     <p> 
                         <strong>[{{ h.subject }}]</strong>
                         {{ h.body | truncatechars:80 }}
-                        <small> -- sent at {{ h.time }}</small>
+                        <small> -- sent at {{ h.time }} by {{ h.sent_by }}</small>
                     </p>
                     </div>
                 </li>
