@@ -1,3 +1,4 @@
+![Django CI](https://github.com/himanshu272/glug_website_backend/workflows/Django%20CI/badge.svg?branch=master)
 # GLUG Website Public Repo
 We are using django REST framework for backend api. <br />
 And Vue.js for frontend. <br />
