@@ -73,8 +73,8 @@ class Event(models.Model):
         super().save(*args, **kwargs)
 
         if(self.add_to_timeline == True):
-            x = Timeline(event_name=self.title, detail=self.description)
-            x.save()
+            if not Timeline.objects.filter(event_name=self.title).exists():
+                Timeline.objects.create(event_name=self.title, detail=self.description)
 
 
 def year_choices():
