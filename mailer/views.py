@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from mailer.forms import MailComposeForm
 from mailer.models import MailSent
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.mail import EmailMultiAlternatives
 from django.contrib import messages
@@ -17,18 +17,21 @@ def check_mail_config():
             return True
     return False
 
-@login_required
+
+@user_passes_test(lambda u: u.is_superuser)
 def index(req):
     conf_check = check_mail_config()
     history = MailSent.objects.all()
     return render(req, 'mailer/index.html',{'history':history, 'check':conf_check})
 
-@login_required
+
+@user_passes_test(lambda u: u.is_superuser)
 def compose_mail(req):
     form = MailComposeForm()
     return render(req, 'mailer/compose.html', {'form': form})
 
-@login_required
+
+@user_passes_test(lambda u: u.is_superuser)
 def send_mail(req):
     if req.method == "POST":
         subject = req.POST['subject']
