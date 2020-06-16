@@ -39,7 +39,7 @@ def send_mail(req):
         # Use multipart for low bounce rates
         html_msg = body
         text_msg = html2text(body)
-        from_email = 'no-reply@nitdgplug.org'
+        from_email = "GNU/Linux Users' Group <no-reply@nitdgplug.org>"
         to = to.split(",")
 
         msg = EmailMultiAlternatives(subject, text_msg, from_email, to)
