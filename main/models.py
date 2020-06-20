@@ -57,6 +57,8 @@ class Event(models.Model):
     show = models.BooleanField(default=True)
     add_to_timeline = models.BooleanField(
         default=False, help_text="To add to timeline.")
+    featured = models.BooleanField(default=False)
+    upcoming = models.BooleanField(default=False)
 
     def __str__(self):
         return self.identifier
