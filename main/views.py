@@ -12,7 +12,7 @@ from django.urls import reverse, NoReverseMatch
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
-
+import datetime
 
 def register(request):
     if request.method == "POST":
@@ -73,15 +73,24 @@ def change_profile(request):
 
 
 class GetCount(APIView):
-    """Return count for Members, Events, and Projects"""
+    """Return count for Alumni, Members, Events and Projects"""
     permission_classes = (AllowAny,)
 
     def get(self, request, format=None):
-        members = len(Profile.objects.all())
+        if datetime.date.today().month > 5:
+            alumni = len(Profile.objects.filter(
+                passout_year__lte=datetime.date.today().year
+                ))
+        else:
+            alumni = len(Profile.objects.filter(
+                passout_year__lte=datetime.date.today().year-1
+                ))
+        members = len(Profile.objects.all()) - alumni
         events = len(Event.objects.all())
         projects = len(Project.objects.all())
 
-        return Response({"members": members, "events": events, "projects": projects})
+        return Response({"members": members, "events": events,
+                         "projects": projects, 'alumni': alumni})
 
 
 class EventViewSet(viewsets.ModelViewSet):
@@ -102,6 +111,19 @@ event_detail = EventViewSet.as_view({
 
 class ProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
+    serializer_class = serializers.ProfileSerializer
+    http_method_names = ['get']
+
+
+class AlumniProfileViewSet(viewsets.ModelViewSet):
+    if datetime.date.today().month > 5:
+        queryset = Profile.objects.filter(
+            passout_year__lte=datetime.date.today().year
+            )
+    else:
+        queryset = Profile.objects.filter(
+            passout_year__lt=datetime.date.today().year
+            )
     serializer_class = serializers.ProfileSerializer
     http_method_names = ['get']
 

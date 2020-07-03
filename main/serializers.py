@@ -59,6 +59,20 @@ class ProfileSerializer(serializers.ModelSerializer):
                   'email', 'image', 'degree_name', 'git_link', 'facebook_link', 'reddit_link', 'linkedin_link')
 
 
+class AlumniProfileSerializer(serializers.ModelSerializer):
+    """Alumni Profile serializer"""
+    # Using Metod field to get a field value of OnetoOneFiled
+    user_name = serializers.SerializerMethodField('get_username')
+
+    def get_username(self, obj):
+        return obj.user.username
+
+    class Meta:
+        model = Profile
+        fields = ('id', 'user_name', 'first_name', 'last_name', 'alias', 'bio', 'passout_year', 'position',
+                  'email', 'image', 'degree_name', 'git_link', 'facebook_link', 'reddit_link', 'linkedin_link')
+
+
 class AboutSerializer(serializers.ModelSerializer):
     class Meta:
         model = About
