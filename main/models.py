@@ -74,9 +74,11 @@ class Event(models.Model):
             self.venue = None
         super().save(*args, **kwargs)
 
-        if(self.add_to_timeline == True):
+        if self.add_to_timeline:
             if not Timeline.objects.filter(event_name=self.title).exists():
-                Timeline.objects.create(event_name=self.title, detail=self.description)
+                Timeline.objects.create(
+                    event_name=self.title, detail=self.description
+                )
 
 
 def year_choices():
@@ -106,7 +108,8 @@ class Profile(models.Model):
     alias = models.CharField(max_length=64, blank=True, null=True)
     bio = models.TextField(max_length=512, blank=True, null=True)
     image = models.ImageField(upload_to='member_images/',
-                              blank=True, null=True, validators=[validate_image_size])
+                              blank=True, null=True,
+                              validators=[validate_image_size])
     email = models.EmailField(blank=True, null=True)
     phone_number = models.CharField(max_length=14, blank=True, null=True)
     degree_name = models.CharField(max_length=64, choices=DEGREE)
@@ -163,7 +166,8 @@ class Activity(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(max_length=1024, blank=True, null=True)
     image = models.ImageField(upload_to='activity_images/',
-                              blank=True, null=True, validators=[validate_image_size])
+                              blank=True, null=True,
+                              validators=[validate_image_size])
 
     class Meta:
         verbose_name_plural = "Activities"
@@ -178,7 +182,8 @@ class Linit(models.Model):
     image = models.ImageField(upload_to='linit_images/', blank=True, null=True)
     year_edition = models.IntegerField(default=2018)
     pdf = models.FileField(upload_to='linit_pdfs/', blank=True,
-                           null=True, validators=[validate_pdf_size])
+                           null=True,
+                           validators=[validate_pdf_size])
     pdf_link = models.URLField(null=True, blank=True)
 
     def __str__(self):

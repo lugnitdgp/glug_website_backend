@@ -12,6 +12,7 @@ from django.urls import reverse, NoReverseMatch
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
+import datetime
 
 
 def register(request):
@@ -77,11 +78,22 @@ class GetCount(APIView):
     permission_classes = (AllowAny,)
 
     def get(self, request, format=None):
-        members = len(Profile.objects.all())
+        if datetime.datetime.now().month > 5:
+            alumni = len(Profile.objects.filter(
+                passout_year__lte=datetime.datetime.now().year)
+                )
+        else:
+            alumni = len(Profile.objects.filter(
+                passout_year__lt=datetime.datetime.now().year)
+                )
+        members = len(Profile.objects.all()) - alumni
         events = len(Event.objects.all())
         projects = len(Project.objects.all())
 
-        return Response({"members": members, "events": events, "projects": projects})
+        return Response({
+            "members": members, "events": events,
+            "projects": projects, 'alumni': alumni
+            })
 
 
 class EventViewSet(viewsets.ModelViewSet):
@@ -105,9 +117,21 @@ class ProfileViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ProfileSerializer
     http_method_names = ['get']
 
+
+class AlumniProfileViewSet(viewsets.ModelViewSet):
+    if datetime.datetime.now().month > 5:
+        queryset = Profile.objects.filter(
+            passout_year__lte=datetime.datetime.now().year
+            )
+    else:
+        queryset = Profile.objects.filter(
+            passout_year__lt=datetime.datetime.now().year
+            )
+    serializer_class = serializers.AlumniProfileSerializer
+    http_method_names = ['get']
+
+
 # ViewSets define the view behavior.
-
-
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = serializers.UserSerializer

@@ -18,6 +18,7 @@ router.register(r'activity', views.ActivityViewSet)
 router.register(r'carousel', views.CarouselImageViewSet)
 router.register(r'linit', views.LinitViewSet)
 router.register(r'timeline', views.TimelineViewSet)
+router.register(r'alumni', views.AlumniProfileViewSet)
 
 urlpatterns = router.urls
 
