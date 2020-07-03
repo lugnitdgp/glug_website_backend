@@ -42,27 +42,4 @@ jobs:
     - name: Run migrate
       run: python manage.py migrate
     - name: Run check
-      run: python manage.py check
-    - name: Running remote SSH commands
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        USERNAME: ${{ secrets.USERNAME }}
-        PORT: ${{ secrets.PORT }}
-        KEY: ${{ secrets.SSHKEY }}
-        script: |
-                cd www/glug_website_backend/
-                git pull
-                echo "Pulled the latest version"
-                source ../env/bin/activate
-                echo "Activated virtual environment"
-                python manage.py makemigrations
-                echo "Made migrations on server"
-                python manage.py migrate --run-syncdb
-                echo "Migrate and sync db on server"
-                sudo systemctl restart gunicorn
-                sudo systemctl restart nginx
-                echo "Restart Gunicorn and Nginx"
-                deactivate
-                echo "Deactivate Virtual environment"
-      
+      run: python manage.py check      
