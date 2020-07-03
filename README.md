@@ -26,3 +26,11 @@ python3 manage.py collectstatic
 # To run with development settings
 python3 manage.py runserver --settings=glug_website.dev-settings
 ```
+
+## Development Environment Config
+This project uses PEP8 code style, please make sure to follow. Yapf is our preffered formatting tool.
+If you are using VSCode add the following in your *settings.json* 
+```
+"python.formatting.provider": "yapf",
+"python.formatting.yapfArgs": ["--style={based_on_style: pep8, indent_width: 4, column_limit: 120}"],
+"python.linting.enabled": true
