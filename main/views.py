@@ -32,16 +32,15 @@ def register(request):
 @login_required
 def create_profile(request):
     if Profile.objects.filter(user=request.user).exists():
-        messages.add_message(
-            request, messages.INFO, 'A Profile already exists for user %s' % request.user.username)
+        messages.add_message(request, messages.INFO, 'A Profile already exists for user %s' % request.user.username)
         return HttpResponseRedirect(reverse('admin:index'))
 
     if request.method == "POST":
         profile_form = ProfileForm(request.POST, request.FILES)
         if profile_form.is_valid():
             profile_form.save(user_id=request.user.pk)
-            messages.add_message(
-                request, messages.INFO, '%s, your Profile has been successfully created.' % request.user.username)
+            messages.add_message(request, messages.INFO,
+                                 '%s, your Profile has been successfully created.' % request.user.username)
             return HttpResponseRedirect(reverse('admin:index'))
     else:
         profile_form = ProfileForm
@@ -52,18 +51,17 @@ def create_profile(request):
 @login_required
 def change_profile(request):
     if not Profile.objects.filter(user=request.user).exists():
-        messages.add_message(
-            request, messages.ERROR, 'No Profile Exists for %s, create one first.' % request.user.username)
+        messages.add_message(request, messages.ERROR,
+                             'No Profile Exists for %s, create one first.' % request.user.username)
         return HttpResponseRedirect(reverse('main:createprofile'))
 
     if request.method == "POST":
         profile_obj = Profile.objects.get(user=request.user)
-        profile_form = ProfileChangeForm(
-            request.POST, request.FILES, instance=profile_obj)
+        profile_form = ProfileChangeForm(request.POST, request.FILES, instance=profile_obj)
         if profile_form.is_valid():
             profile_form.save(user_id=request.user.pk)
-            messages.add_message(
-                request, messages.INFO, '%s, your Profile has been successfully updated.' % request.user.username)
+            messages.add_message(request, messages.INFO,
+                                 '%s, your Profile has been successfully updated.' % request.user.username)
             return HttpResponseRedirect(reverse('admin:index'))
     else:
         profile_obj = Profile.objects.get(user=request.user)
@@ -74,7 +72,7 @@ def change_profile(request):
 
 class GetCount(APIView):
     """Return count for Members, Events, and Projects"""
-    permission_classes = (AllowAny,)
+    permission_classes = (AllowAny, )
 
     def get(self, request, format=None):
         members = len(Profile.objects.all())
@@ -91,19 +89,16 @@ class EventViewSet(viewsets.ModelViewSet):
     http_method_names = ['get']
 
 
-event_list = EventViewSet.as_view({
-    'get': 'list'
-})
+event_list = EventViewSet.as_view({'get': 'list'})
 
-event_detail = EventViewSet.as_view({
-    'get': 'retrieve'
-})
+event_detail = EventViewSet.as_view({'get': 'retrieve'})
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = serializers.ProfileSerializer
     http_method_names = ['get']
+
 
 # ViewSets define the view behavior.
 

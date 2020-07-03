@@ -9,22 +9,15 @@ class ProfileForm(ModelForm):
     class Meta:
         model = Profile
         fields = [
-            'first_name',
-            'last_name',
-            'image',
-            'bio',
-            'email',
-            'phone_number',
-            'degree_name',
-            'passout_year',
-            'git_link',
-            'facebook_link',
-            'twitter_link',
-            'linkedin_link',
-            'reddit_link'
+            'first_name', 'last_name', 'image', 'bio', 'email', 'phone_number', 'degree_name', 'passout_year',
+            'git_link', 'facebook_link', 'twitter_link', 'linkedin_link', 'reddit_link'
         ]
 
-    def save(self, user_id, commit=True,):
+    def save(
+        self,
+        user_id,
+        commit=True,
+    ):
         profile = super(ProfileForm, self).save(commit=False)
         profile.user = User.objects.get(pk=user_id)
         # Add to a basic group when created
@@ -41,25 +34,18 @@ class ProfileChangeForm(ModelForm):
     class Meta:
         model = Profile
         fields = [
-            'first_name',
-            'last_name',
-            'image',
-            'bio',
-            'email',
-            'phone_number',
-            'degree_name',
-            'passout_year',
-            'git_link',
-            'facebook_link',
-            'twitter_link',
-            'linkedin_link',
-            'reddit_link'
+            'first_name', 'last_name', 'image', 'bio', 'email', 'phone_number', 'degree_name', 'passout_year',
+            'git_link', 'facebook_link', 'twitter_link', 'linkedin_link', 'reddit_link'
         ]
 
     def __init__(self, *args, **kwargs):
         super(ProfileChangeForm, self).__init__(*args, **kwargs)
 
-    def save(self, user_id, commit=True,):
+    def save(
+        self,
+        user_id,
+        commit=True,
+    ):
         profile = super(ProfileChangeForm, self).save(commit=False)
         profile.user = User.objects.get(pk=user_id)
         if commit:

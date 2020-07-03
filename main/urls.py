@@ -3,7 +3,6 @@ from rest_framework import routers
 from . import views
 # from django.contrib.auth import views as auth_views
 
-
 # AppName
 app_name = 'main'
 

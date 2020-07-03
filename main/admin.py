@@ -33,13 +33,11 @@ class EventAdmin(admin.ModelAdmin):
     mark_final.short_description = "Mark Event Data as Final"
 
     def event_image_preview(self, obj):
-        return format_html(
-            '<img src="{url}" width="{width}" height={height} />'.format(
-                url=obj.event_image.url,
-                width='450px',
-                height='auto',
-            )
-        )
+        return format_html('<img src="{url}" width="{width}" height={height} />'.format(
+            url=obj.event_image.url,
+            width='450px',
+            height='auto',
+        ))
 
     # Overriding the get_urls() method to add custom urls
     def get_urls(self):
@@ -57,8 +55,7 @@ class EventAdmin(admin.ModelAdmin):
         event_obj.show = not event_obj.show
         event_obj.save()
         ct = ContentType.objects.get_for_model(event_obj)
-        return_url = reverse('admin:%s_%s_changelist' %
-                             (ct.app_label, ct.model))
+        return_url = reverse('admin:%s_%s_changelist' % (ct.app_label, ct.model))
 
         return HttpResponseRedirect(return_url, {})
 
@@ -75,12 +72,12 @@ class SpecialTokenAdmin(admin.ModelAdmin):
     list_display = ['name', 'value', 'used', 'max_usage', 'valid_till']
     readonly_fields = ['value', 'used']
 
-# This Section Handels the Log Entry
 
+# This Section Handels the Log Entry
 
 action_names = {
     ADDITION: 'Addition',
-    CHANGE:   'Change',
+    CHANGE: 'Change',
     DELETION: 'Deletion',
 }
 
@@ -88,7 +85,7 @@ action_names = {
 class FilterBase(admin.SimpleListFilter):
     def queryset(self, request, queryset):
         if self.value():
-            dictionary = dict(((self.parameter_name, self.value()),))
+            dictionary = dict(((self.parameter_name, self.value()), ))
             return queryset.filter(**dictionary)
 
 
@@ -106,9 +103,8 @@ class UserFilter(FilterBase):
     parameter_name = 'user_id'
 
     def lookups(self, request, model_admin):
-        return tuple((u.id, u.username)
-                     for u in User.objects.filter(pk__in=LogEntry.objects.values_list('user_id').distinct())
-                     )
+        return tuple(
+            (u.id, u.username) for u in User.objects.filter(pk__in=LogEntry.objects.values_list('user_id').distinct()))
 
 
 class AdminFilter(UserFilter):
@@ -140,10 +136,7 @@ class LogEntryAdmin(admin.ModelAdmin):
         # 'user',
     ]
 
-    search_fields = [
-        'object_repr',
-        'change_message'
-    ]
+    search_fields = ['object_repr', 'change_message']
 
     list_display = [
         'action_time',
@@ -167,12 +160,12 @@ class LogEntryAdmin(admin.ModelAdmin):
         ct = obj.content_type
         repr_ = escape(obj.object_repr)
         try:
-            href = reverse('admin:%s_%s_change' %
-                           (ct.app_label, ct.model), args=[obj.object_id])
+            href = reverse('admin:%s_%s_change' % (ct.app_label, ct.model), args=[obj.object_id])
             link = '<a href="%s">%s</a>' % (href, repr_)
         except NoReverseMatch:
             link = repr_
         return format_html(link) if obj.action_flag != DELETION else repr_
+
     object_link.allow_tags = True
     object_link.admin_order_field = 'object_repr'
     object_link.short_description = 'object'
@@ -183,6 +176,7 @@ class LogEntryAdmin(admin.ModelAdmin):
 
     def action_description(self, obj):
         return action_names[obj.action_flag]
+
     action_description.short_description = 'Action'
 
 
@@ -208,6 +202,7 @@ class SessionAdmin(admin.ModelAdmin):
             return user_obj
         else:
             return "Anon"
+
     get_username.short_description = "Username"
 
     def has_add_permission(self, request):
@@ -221,7 +216,11 @@ admin.site.register(Session, SessionAdmin)
 
 
 class CustomUserAdmin(UserAdmin):
-    list_display = ('username', 'email', 'is_staff', )
+    list_display = (
+        'username',
+        'email',
+        'is_staff',
+    )
     actions = ['set_random_pass']
 
     def set_random_pass(self, req, queryset):

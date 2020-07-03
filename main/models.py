@@ -10,8 +10,7 @@ import datetime
 def validate_pdf_size(value):
     limit = 100 * 1024 * 1024
     if value.size > limit:
-        raise ValidationError(
-            'File too large. Size should not exceed 100 MiB.')
+        raise ValidationError('File too large. Size should not exceed 100 MiB.')
 
 
 def validate_image_size(value):
@@ -19,15 +18,14 @@ def validate_image_size(value):
     if value.size > limit:
         raise ValidationError('File too large. Size should not exceed 1 MiB.')
 
+
 # Create your models here.
 
 
 class Event(models.Model):
-    identifier = models.CharField(
-        max_length=64, unique=True, help_text="Unique Identifier for events")
+    identifier = models.CharField(max_length=64, unique=True, help_text="Unique Identifier for events")
     title = models.CharField(max_length=255)
-    event_image = models.ImageField(
-        upload_to='event_images/', null=True, blank=True, validators=[validate_image_size])
+    event_image = models.ImageField(upload_to='event_images/', null=True, blank=True, validators=[validate_image_size])
     description = RichTextField(blank=True, null=True)
 
     # Choices of status
@@ -44,10 +42,8 @@ class Event(models.Model):
     )
 
     event_type = models.CharField(max_length=64, choices=TYPE)
-    venue = models.CharField(max_length=255, blank=True,
-                             null=True, help_text="Venue for Offline Events.")
-    url = models.URLField(max_length=255, blank=True,
-                          null=True, help_text="URL for Online Events.")
+    venue = models.CharField(max_length=255, blank=True, null=True, help_text="Venue for Offline Events.")
+    url = models.URLField(max_length=255, blank=True, null=True, help_text="URL for Online Events.")
     event_timing = models.DateTimeField(blank=True, null=True)
     facebook_link = models.URLField(null=True, blank=True)
     pub_date = models.DateTimeField(auto_now=True)
@@ -55,8 +51,7 @@ class Event(models.Model):
     edited_by = models.CharField(max_length=255, blank=True, null=True)
     status = models.CharField(max_length=64, choices=STATUS)
     show = models.BooleanField(default=True)
-    add_to_timeline = models.BooleanField(
-        default=False, help_text="To add to timeline.")
+    add_to_timeline = models.BooleanField(default=False, help_text="To add to timeline.")
 
     def __str__(self):
         return self.identifier
@@ -72,14 +67,14 @@ class Event(models.Model):
             self.venue = None
         super().save(*args, **kwargs)
 
-        if(self.add_to_timeline == True):
+        if (self.add_to_timeline == True):
             if not Timeline.objects.filter(event_name=self.title).exists():
                 Timeline.objects.create(event_name=self.title, detail=self.description)
 
 
 def year_choices():
     cuur_year = datetime.date.today().year
-    return [(y, y) for y in range(cuur_year, cuur_year+4+1)]
+    return [(y, y) for y in range(cuur_year, cuur_year + 4 + 1)]
 
 
 class Profile(models.Model):
@@ -103,8 +98,7 @@ class Profile(models.Model):
 
     alias = models.CharField(max_length=64, blank=True, null=True)
     bio = models.TextField(max_length=512, blank=True, null=True)
-    image = models.ImageField(upload_to='member_images/',
-                              blank=True, null=True, validators=[validate_image_size])
+    image = models.ImageField(upload_to='member_images/', blank=True, null=True, validators=[validate_image_size])
     email = models.EmailField(blank=True, null=True)
     phone_number = models.CharField(max_length=14, blank=True, null=True)
     degree_name = models.CharField(max_length=64, choices=DEGREE)
@@ -123,8 +117,7 @@ class Profile(models.Model):
 
 class CarouselImage(models.Model):
     identifier = models.CharField(max_length=64, unique=True)
-    image = models.ImageField(upload_to='card_images/',
-                              validators=[validate_image_size])
+    image = models.ImageField(upload_to='card_images/', validators=[validate_image_size])
     heading = models.CharField(max_length=255, blank=True, null=True)
     sub_heading = models.TextField(max_length=1024, blank=True, null=True)
 
@@ -160,8 +153,7 @@ class Contact(models.Model):
 class Activity(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(max_length=1024, blank=True, null=True)
-    image = models.ImageField(upload_to='activity_images/',
-                              blank=True, null=True, validators=[validate_image_size])
+    image = models.ImageField(upload_to='activity_images/', blank=True, null=True, validators=[validate_image_size])
 
     class Meta:
         verbose_name_plural = "Activities"
@@ -175,8 +167,7 @@ class Linit(models.Model):
     description = models.TextField(max_length=1024, blank=True, null=True)
     image = models.ImageField(upload_to='linit_images/', blank=True, null=True)
     year_edition = models.IntegerField(default=2018)
-    pdf = models.FileField(upload_to='linit_pdfs/', blank=True,
-                           null=True, validators=[validate_pdf_size])
+    pdf = models.FileField(upload_to='linit_pdfs/', blank=True, null=True, validators=[validate_pdf_size])
     pdf_link = models.URLField(null=True, blank=True)
 
     def __str__(self):
