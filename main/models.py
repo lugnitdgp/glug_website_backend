@@ -81,6 +81,7 @@ class Profile(models.Model):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    alumni = models.BooleanField()
 
     # Choices of degree
     DEGREE = (
