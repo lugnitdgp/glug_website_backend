@@ -95,10 +95,15 @@ event_detail = EventViewSet.as_view({'get': 'retrieve'})
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
-    queryset = Profile.objects.all()
+    queryset = Profile.objects.filter(alumni=False)
     serializer_class = serializers.ProfileSerializer
     http_method_names = ['get']
 
+
+class AlumniViewSet(viewsets.ModelViewSet):
+    queryset = Profile.objects.filter(alumni=True)
+    serializer_class = serializers.AlumniProfileSerializer
+    http_method_names = ['get']
 
 # ViewSets define the view behavior.
 
