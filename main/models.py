@@ -115,11 +115,6 @@ class Profile(models.Model):
         return self.first_name
 
 
-def year_choices_alumni():
-    curr_year =  datetime.date.today().year
-    return [(y,y) for y in range(curr_year - 10, curr_year)]
-
-
 class Alumni(models.Model):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
@@ -133,11 +128,11 @@ class Alumni(models.Model):
 
     alias = models.CharField(max_length=64, blank=True, null=True)
     bio = models.TextField(max_length=512, blank=True, null=True)
-    image = models.ImageField(upload_to='member_images/', blank=True, null=True, validators=[validate_image_size])
+    image = models.ImageField(upload_to='alumni_images/', blank=True, null=True, validators=[validate_image_size])
     email = models.EmailField(blank=True, null=True)
     phone_number = models.CharField(max_length=14, blank=True, null=True)
     degree_name = models.CharField(max_length=64, choices=DEGREE)
-    passout_year = models.IntegerField(choices=year_choices_alumni(), default=2018)
+    passout_year = models.IntegerField(default=2018)
     position = models.CharField(max_length=255, blank=True, null=True)
 
     git_link = models.URLField(null=True, blank=True)
