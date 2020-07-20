@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets, generics
 from django.contrib.auth.models import User
-from main.models import Event, Profile, About, Project, Contact, Activity, CarouselImage, Linit, Timeline
+from main.models import Event, Profile, Alumni,About, Project, Contact, Activity, CarouselImage, Linit, Timeline
 from main import serializers
 from main.forms import ProfileForm, ProfileChangeForm, MemberRegistrationForm
 from django.contrib.auth.forms import UserCreationForm
@@ -12,7 +12,7 @@ from django.urls import reverse, NoReverseMatch
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
-import datetime
+
 
 def register(request):
     if request.method == "POST":
@@ -32,16 +32,15 @@ def register(request):
 @login_required
 def create_profile(request):
     if Profile.objects.filter(user=request.user).exists():
-        messages.add_message(
-            request, messages.INFO, 'A Profile already exists for user %s' % request.user.username)
+        messages.add_message(request, messages.INFO, 'A Profile already exists for user %s' % request.user.username)
         return HttpResponseRedirect(reverse('admin:index'))
 
     if request.method == "POST":
         profile_form = ProfileForm(request.POST, request.FILES)
         if profile_form.is_valid():
             profile_form.save(user_id=request.user.pk)
-            messages.add_message(
-                request, messages.INFO, '%s, your Profile has been successfully created.' % request.user.username)
+            messages.add_message(request, messages.INFO,
+                                 '%s, your Profile has been successfully created.' % request.user.username)
             return HttpResponseRedirect(reverse('admin:index'))
     else:
         profile_form = ProfileForm
@@ -52,18 +51,17 @@ def create_profile(request):
 @login_required
 def change_profile(request):
     if not Profile.objects.filter(user=request.user).exists():
-        messages.add_message(
-            request, messages.ERROR, 'No Profile Exists for %s, create one first.' % request.user.username)
+        messages.add_message(request, messages.ERROR,
+                             'No Profile Exists for %s, create one first.' % request.user.username)
         return HttpResponseRedirect(reverse('main:createprofile'))
 
     if request.method == "POST":
         profile_obj = Profile.objects.get(user=request.user)
-        profile_form = ProfileChangeForm(
-            request.POST, request.FILES, instance=profile_obj)
+        profile_form = ProfileChangeForm(request.POST, request.FILES, instance=profile_obj)
         if profile_form.is_valid():
             profile_form.save(user_id=request.user.pk)
-            messages.add_message(
-                request, messages.INFO, '%s, your Profile has been successfully updated.' % request.user.username)
+            messages.add_message(request, messages.INFO,
+                                 '%s, your Profile has been successfully updated.' % request.user.username)
             return HttpResponseRedirect(reverse('admin:index'))
     else:
         profile_obj = Profile.objects.get(user=request.user)
@@ -73,24 +71,16 @@ def change_profile(request):
 
 
 class GetCount(APIView):
-    """Return count for Alumni, Members, Events and Projects"""
-    permission_classes = (AllowAny,)
+    """Return count for Members, Alumni,Events, and Projects"""
+    permission_classes = (AllowAny, )
 
     def get(self, request, format=None):
-        if datetime.date.today().month > 5:
-            alumni = len(Profile.objects.filter(
-                passout_year__lte=datetime.date.today().year
-                ))
-        else:
-            alumni = len(Profile.objects.filter(
-                passout_year__lte=datetime.date.today().year-1
-                ))
-        members = len(Profile.objects.all()) - alumni
+        alumni = len(Alumni.objects.all())
+        members = len(Profile.objects.all())
         events = len(Event.objects.all())
         projects = len(Project.objects.all())
 
-        return Response({"members": members, "events": events,
-                         "projects": projects, 'alumni': alumni})
+        return Response({"members": members, "alumni": alumni,"events": events, "projects": projects})
 
 
 class EventViewSet(viewsets.ModelViewSet):
@@ -100,13 +90,9 @@ class EventViewSet(viewsets.ModelViewSet):
     http_method_names = ['get']
 
 
-event_list = EventViewSet.as_view({
-    'get': 'list'
-})
+event_list = EventViewSet.as_view({'get': 'list'})
 
-event_detail = EventViewSet.as_view({
-    'get': 'retrieve'
-})
+event_detail = EventViewSet.as_view({'get': 'retrieve'})
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
@@ -115,17 +101,11 @@ class ProfileViewSet(viewsets.ModelViewSet):
     http_method_names = ['get']
 
 
-class AlumniProfileViewSet(viewsets.ModelViewSet):
-    if datetime.date.today().month > 5:
-        queryset = Profile.objects.filter(
-            passout_year__lte=datetime.date.today().year
-            )
-    else:
-        queryset = Profile.objects.filter(
-            passout_year__lt=datetime.date.today().year
-            )
-    serializer_class = serializers.ProfileSerializer
+class AlumniViewSet(viewsets.ModelViewSet):
+    queryset = Alumni.objects.all()
+    serializer_class = serializers.AlumniSerializer
     http_method_names = ['get']
+
 
 # ViewSets define the view behavior.
 

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from main.models import Event, Profile, About, Project, Contact, Activity, CarouselImage, Linit, Timeline
+from main.models import Event, Profile,Alumni ,About, Project, Contact, Activity, CarouselImage, Linit, Timeline
 import datetime
 
 
@@ -33,8 +33,8 @@ class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = ('show_bool', 'id', 'identifier', 'title', 'description', 'venue',
-                  'url', 'event_timing', 'facebook_link', 'event_image', 'status')
+        fields = ('show_bool', 'id', 'identifier', 'title', 'description', 'venue', 'url', 'event_timing',
+                  'facebook_link', 'event_image', 'status')
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -45,32 +45,26 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     def get_year(self, obj):
         # After Month May(5) a academic year changes
-        if(datetime.date.today().month > 5):
-            return (5-(obj.passout_year-datetime.date.today().year))
+        if (datetime.date.today().month > 5):
+            return (5 - (obj.passout_year - datetime.date.today().year))
         else:
-            return (5-(obj.passout_year-datetime.date.today().year)-1)
+            return (5 - (obj.passout_year - datetime.date.today().year) - 1)
 
     def get_username(self, obj):
         return obj.user.username
 
     class Meta:
         model = Profile
-        fields = ('id', 'user_name', 'first_name', 'last_name', 'alias', 'bio', 'year_name', 'position',
-                  'email', 'image', 'degree_name', 'git_link', 'facebook_link', 'reddit_link', 'linkedin_link')
+        fields = ('id', 'user_name', 'first_name', 'last_name', 'alias', 'bio', 'year_name', 'position', 'email',
+                  'image', 'degree_name', 'git_link', 'facebook_link', 'reddit_link', 'linkedin_link')
 
 
-class AlumniProfileSerializer(serializers.ModelSerializer):
+class AlumniSerializer(serializers.ModelSerializer):
     """Alumni Profile serializer"""
-    # Using Metod field to get a field value of OnetoOneFiled
-    user_name = serializers.SerializerMethodField('get_username')
-
-    def get_username(self, obj):
-        return obj.user.username
-
     class Meta:
-        model = Profile
-        fields = ('id', 'user_name', 'first_name', 'last_name', 'alias', 'bio', 'passout_year', 'position',
-                  'email', 'image', 'degree_name', 'git_link', 'facebook_link', 'reddit_link', 'linkedin_link')
+        model = Alumni
+        fields = ('id', 'user_name', 'first_name', 'last_name', 'alias', 'bio', 'passout_year', 'position', 'email',
+                  'image', 'degree_name', 'git_link', 'facebook_link', 'twitter_link', 'reddit_link', 'linkedin_link')
 
 
 class AboutSerializer(serializers.ModelSerializer):
