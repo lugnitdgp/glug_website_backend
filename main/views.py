@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets, generics
 from django.contrib.auth.models import User
-from main.models import Event, Profile, About, Project, Contact, Activity, CarouselImage, Linit, Timeline
+from main.models import Event, Profile, Alumni, About, Project, Contact, Activity, CarouselImage, Linit, Timeline
 from main import serializers
 from main.forms import ProfileForm, ProfileChangeForm, MemberRegistrationForm
 from django.contrib.auth.forms import UserCreationForm
@@ -71,15 +71,16 @@ def change_profile(request):
 
 
 class GetCount(APIView):
-    """Return count for Members, Events, and Projects"""
+    """Return count for Members, Alumni,Events, and Projects"""
     permission_classes = (AllowAny, )
 
     def get(self, request, format=None):
+        alumni = len(Alumni.objects.all())
         members = len(Profile.objects.all())
         events = len(Event.objects.all())
         projects = len(Project.objects.all())
 
-        return Response({"members": members, "events": events, "projects": projects})
+        return Response({"members": members, "alumni": alumni,"events": events, "projects": projects})
 
 
 class EventViewSet(viewsets.ModelViewSet):
@@ -99,6 +100,11 @@ class ProfileViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ProfileSerializer
     http_method_names = ['get']
 
+
+class AlumniViewSet(viewsets.ModelViewSet):
+    queryset = Alumni.objects.all()
+    serializer_class = serializers.AlumniSerializer
+    http_method_names = ['get']
 
 # ViewSets define the view behavior.
 
