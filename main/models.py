@@ -124,17 +124,17 @@ class Profile(models.Model):
         """
         if self.convert_to_alumni == True:
             initial_data = model_to_dict(self)
-            self.pop('convert_to_alumni')
+            self.pop('convert_to_alumni', None)
+            self.pop('user', None)
             alumni = Alumni(**initial_data)
             alumni.save()
             self.delete()
-        return 
+        return
 
 
 class Alumni(models.Model):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
 
     # Choices of degree
     DEGREE = (
