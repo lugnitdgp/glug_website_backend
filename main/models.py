@@ -118,18 +118,20 @@ class Profile(models.Model):
     def __str__(self):
         return self.first_name
     
-    def save(self):
+    def save(self, *args, **kwargs):
         """
         Checks if the profile belongs to an alumni or not and converts to alumni if True
         """
         if self.convert_to_alumni == True:
             initial_data = model_to_dict(self)
-            self.pop('convert_to_alumni', None)
-            self.pop('user', None)
+            initial_data.pop('convert_to_alumni', None)
+            initial_data.pop('user', None)
             alumni = Alumni(**initial_data)
             alumni.save()
             self.delete()
-        return
+            return
+        else: 
+            super(Profile, self).save(*args, **kwargs)
 
 
 class Alumni(models.Model):

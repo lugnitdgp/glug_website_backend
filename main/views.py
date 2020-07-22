@@ -5,13 +5,16 @@ from main.models import Event, Profile, Alumni, About, Project, Contact, Activit
 from main import serializers
 from main.forms import ProfileForm, ProfileChangeForm, MemberRegistrationForm
 from django.contrib.auth.forms import UserCreationForm
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from django.urls import reverse, NoReverseMatch
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
+import datetime
+import json
 
 
 def register(request):
@@ -68,6 +71,23 @@ def change_profile(request):
         profile_form = ProfileChangeForm(instance=profile_obj)
         args = {'profile_form': profile_form}
         return render(request, 'profile/changeprofile.html', args)
+
+
+@staff_member_required
+def convert_to_alumni(request):
+    if datetime.datetime.today().month > 5:
+        profiles = Profile.objects.filter(passout_year__lte=datetime.datetime.today().year)
+    else:
+        profiles = Profile.objects.filter(passout_year__lt=datetime.datetime.today().year)
+    
+    if request.method == "POST":
+        ids = json.loads(request.POST.get("json_sent"))
+        for idx in ids:
+            profile = Profile.objects.get(id=idx)
+            profile.convert_to_alumni = True
+            profile.save(commit=True)
+        return HttpResponseRedirect(reverse("main:convert2alumni"))
+    return render(request, "profile/batch_convert_alumni.html", {"profiles": profiles})
 
 
 class GetCount(APIView):

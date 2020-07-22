@@ -235,6 +235,9 @@ class CustomUserAdmin(UserAdmin):
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ['first_name', 'user', 'email']
 
+class AlumniAdmin(admin.ModelAdmin):
+    list_display = ['first_name', 'last_name', 'email']
+
 
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
@@ -242,6 +245,7 @@ admin.site.register(User, CustomUserAdmin)
 admin.site.register(models.Event, EventAdmin)
 admin.site.register(models.Project)
 admin.site.register(models.Profile, ProfileAdmin)
+admin.site.register(models.Alumni, AlumniAdmin)
 admin.site.register(models.CarouselImage)
 admin.site.register(models.About)
 admin.site.register(models.Contact)

@@ -28,4 +28,5 @@ urlpatterns += [
     path('accounts/createprofile/', views.create_profile, name='createprofile'),
     path('accounts/changeprofile/', views.change_profile, name='changerofile'),
     path('get_count/', views.GetCount.as_view(), name="get_count"),
+    path('convert_to_alumni/', views.convert_to_alumni, name="convert2alumni"),
 ]
