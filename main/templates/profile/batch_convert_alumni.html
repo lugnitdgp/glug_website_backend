@@ -21,9 +21,9 @@
         <form id="checkboxes" class="checkboxes" method="POST">
             {% csrf_token %}
             {% for profile in profiles %}
-            <div class="form-group">
+            <div class="container">
                 <input type="checkbox" class="check" id="{{ forloop.counter0 }}" data-value="{{ profile.id }}">
-                <label for="{{ forloop.counter0 }}"> {{profile.first_name}} {{profile.last_name}} </label>
+                <label for="{{ forloop.counter0 }}"> {{profile.first_name}} {{profile.last_name}}: {{profile.passout_year}} </label>
             </div>
             <br>
             {% endfor %}
