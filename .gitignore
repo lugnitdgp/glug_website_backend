@@ -29,3 +29,5 @@ main/migrations/00*
 blog/migrations/00*
 ##
 mailer/migrations/00*
+Pipfile
+Pipfile.lock
