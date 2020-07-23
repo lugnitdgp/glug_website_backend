@@ -86,7 +86,7 @@ class ActivitySerializers(serializers.ModelSerializer):
 class CarouselImageSerializers(serializers.ModelSerializer):
     class Meta:
         model = CarouselImage
-        fields = ('identifier', 'image', 'heading', 'sub_heading')
+        fields = ('identifier', 'image', 'mobile_image', 'heading', 'sub_heading')
 
 
 class LinitSerializers(serializers.ModelSerializer):

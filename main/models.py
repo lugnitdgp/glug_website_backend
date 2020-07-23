@@ -118,6 +118,10 @@ class Profile(models.Model):
 class CarouselImage(models.Model):
     identifier = models.CharField(max_length=64, unique=True)
     image = models.ImageField(upload_to='card_images/', validators=[validate_image_size])
+    mobile_image = models.ImageField(upload_to='card_images/mobile/',
+                                     validators=[validate_image_size],
+                                     blank=True,
+                                     null=True)
     heading = models.CharField(max_length=255, blank=True, null=True)
     sub_heading = models.TextField(max_length=1024, blank=True, null=True)
 
