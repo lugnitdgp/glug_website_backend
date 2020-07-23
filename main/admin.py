@@ -2,7 +2,6 @@ from django.contrib import admin
 from django.utils.html import format_html
 from django.http import HttpResponseRedirect
 from main import models
-
 from django.contrib.admin.models import LogEntry, ADDITION, CHANGE, DELETION
 from django.utils.html import escape
 from django.urls import reverse, NoReverseMatch, path
@@ -233,11 +232,19 @@ class CustomUserAdmin(UserAdmin):
 
 
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ['first_name', 'user', 'email']
+    list_display = ['first_name', 'user', 'email', 'passout_year']
+    actions= ['convert_to_alumni', ]
+
+    def convert_to_alumni(modeladmin, request, queryset):
+        for profile in queryset:
+            profile.convert_to_alumni = True
+            profile.save(commit=True)
+
+    convert_to_alumni.short_description = 'Convert to Alumni'
 
 class AlumniAdmin(admin.ModelAdmin):
-    list_display = ['first_name', 'last_name', 'email']
-
+    list_display = ['first_name', 'last_name', 'passout_year']
+    
 
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
