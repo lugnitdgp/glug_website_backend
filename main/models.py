@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 from django.utils.crypto import get_random_string
 from django.utils import timezone
 import datetime
+from django.forms.models import model_to_dict
 
 
 def validate_pdf_size(value):
@@ -52,6 +53,8 @@ class Event(models.Model):
     status = models.CharField(max_length=64, choices=STATUS)
     show = models.BooleanField(default=True)
     add_to_timeline = models.BooleanField(default=False, help_text="To add to timeline.")
+    featured = models.BooleanField(default=False)
+    upcoming = models.BooleanField(default=True)
 
     def __str__(self):
         return self.identifier
@@ -104,6 +107,7 @@ class Profile(models.Model):
     degree_name = models.CharField(max_length=64, choices=DEGREE)
     passout_year = models.IntegerField(choices=year_choices(), default=2018)
     position = models.CharField(max_length=255, blank=True, null=True)
+    convert_to_alumni = models.BooleanField(default=False)
 
     git_link = models.URLField(null=True, blank=True)
     facebook_link = models.URLField(null=True, blank=True)
@@ -113,6 +117,54 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.first_name
+    
+    def save(self, *args, **kwargs):
+        """
+        Checks if the profile belongs to an alumni or not and converts to alumni if True
+        """
+        if self.convert_to_alumni == True:
+            initial_data = model_to_dict(self)
+            if self.user is not None:
+                user = self.user
+                user.is_active = False
+            initial_data.pop('convert_to_alumni', None)
+            initial_data.pop('user', None)
+            alumni = Alumni(**initial_data)
+            alumni.save()
+            self.delete()
+            return
+        else: 
+            super(Profile, self).save(*args, **kwargs)
+
+
+class Alumni(models.Model):
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+
+    # Choices of degree
+    DEGREE = (
+        ('BTECH', 'B.Tech'),
+        ('MCA', 'MCA'),
+        ('MTECH', 'M.Tech'),
+    )
+
+    alias = models.CharField(max_length=64, blank=True, null=True)
+    bio = models.TextField(max_length=512, blank=True, null=True)
+    image = models.ImageField(upload_to='alumni_images/', blank=True, null=True, validators=[validate_image_size])
+    email = models.EmailField(blank=True, null=True)
+    phone_number = models.CharField(max_length=14, blank=True, null=True)
+    degree_name = models.CharField(max_length=64, choices=DEGREE)
+    passout_year = models.IntegerField(default=2018)
+    position = models.CharField(max_length=255, blank=True, null=True)
+
+    git_link = models.URLField(null=True, blank=True)
+    facebook_link = models.URLField(null=True, blank=True)
+    twitter_link = models.URLField(null=True, blank=True)
+    reddit_link = models.URLField(null=True, blank=True)
+    linkedin_link = models.URLField(null=True, blank=True)
+
+    def __str__(self):
+        return (self.first_name + " " + self.last_name)
 
 
 class CarouselImage(models.Model):
