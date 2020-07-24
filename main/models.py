@@ -124,9 +124,8 @@ class Profile(models.Model):
         """
         if self.convert_to_alumni == True:
             initial_data = model_to_dict(self)
-            if self.user is not None:
-                user = self.user
-                user.is_active = False
+            if self.user is not None: self.user.is_active = False
+            self.user.save()
             initial_data.pop('convert_to_alumni', None)
             initial_data.pop('user', None)
             alumni = Alumni(**initial_data)
