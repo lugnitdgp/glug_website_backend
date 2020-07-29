@@ -63,7 +63,7 @@ class AlumniSerializer(serializers.ModelSerializer):
     """Alumni Profile serializer"""
     class Meta:
         model = Alumni
-        fields = ('id', 'user_name', 'first_name', 'last_name', 'alias', 'bio', 'passout_year', 'position', 'email',
+        fields = ('id', 'first_name', 'last_name', 'alias', 'bio', 'passout_year', 'position', 'email',
                   'image', 'degree_name', 'git_link', 'facebook_link', 'twitter_link', 'reddit_link', 'linkedin_link')
 
 
