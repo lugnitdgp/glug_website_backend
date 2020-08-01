@@ -1,4 +1,5 @@
 ![Django CI](https://github.com/lugnitdgp/glug_website_backend/workflows/Django%20CI/badge.svg?branch=master)
+![Backend CD](https://github.com/lugnitdgp/glug_website_backend/workflows/Backend%20CD/badge.svg?branch=prod)
 # GLUG Website Public Repo
 We are using django REST framework for backend api. <br />
 And Vue.js for frontend. <br />
