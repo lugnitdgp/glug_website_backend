@@ -72,7 +72,7 @@ class Event(models.Model):
 
         if (self.add_to_timeline == True):
             if not Timeline.objects.filter(event_name=self.title).exists():
-                Timeline.objects.create(event_name=self.title, detail=self.description)
+                Timeline.objects.create(event_name=self.title, detail=self.description, event_time=self.event_timing.date())
 
 
 def year_choices():
@@ -164,6 +164,9 @@ class Alumni(models.Model):
 
     def __str__(self):
         return (self.first_name + " " + self.last_name)
+
+    class Meta:
+        verbose_name_plural = "Alumni"
 
 
 class CarouselImage(models.Model):
@@ -261,12 +264,12 @@ class SpecialToken(models.Model):
 class Timeline(models.Model):
     event_name = models.CharField(max_length=120)
     detail = RichTextField()
-    event_time = models.DateField(blank=True)
+    event_time = models.DateField(blank=True, auto_now_add=False)
 
     def __str__(self):
         return self.event_name
 
-    def save(self, *args, **kwargs):
-        if not self.id:
-            self.event_time = timezone.now()
-        return super(Timeline, self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     if not self.id:
+    #         self.event_time = timezone.now()
+    #     return super(Timeline, self).save(*args, **kwargs)

@@ -102,7 +102,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
 
 
 class AlumniViewSet(viewsets.ModelViewSet):
-    queryset = Alumni.objects.all()
+    queryset = Alumni.objects.all().order_by('-passout_year', 'first_name')
     serializer_class = serializers.AlumniSerializer
     http_method_names = ['get']
 
