@@ -84,7 +84,7 @@ class GetCount(APIView):
 
 
 class EventViewSet(viewsets.ModelViewSet):
-    queryset = Event.objects.all()
+    queryset = Event.objects.all().order_by('-event_timing')
     serializer_class = serializers.EventSerializer
     lookup_field = 'identifier'
     http_method_names = ['get']
