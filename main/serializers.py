@@ -26,6 +26,8 @@ class EventSerializer(serializers.ModelSerializer):
             obj.facebook_link = None
             obj.event_image = None
             obj.status = None
+            obj.featured = None
+            obj.upcoming = None
             return False
 
         elif obj.show == True:
@@ -34,7 +36,7 @@ class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = ('show_bool', 'id', 'identifier', 'title', 'description', 'venue', 'url', 'event_timing',
-                  'facebook_link', 'event_image', 'status')
+                  'facebook_link', 'event_image', 'status', 'featured', 'upcoming')
 
 
 class ProfileSerializer(serializers.ModelSerializer):
