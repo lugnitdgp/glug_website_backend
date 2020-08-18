@@ -25,6 +25,7 @@ class PostSerializers(serializers.ModelSerializer):
             obj.content_body = None
             obj.thumbnail_image = None
             obj.date_to_show = None
+            obj.featured = None
             return False
 
         elif obj.show == True:
@@ -33,4 +34,4 @@ class PostSerializers(serializers.ModelSerializer):
     class Meta:
         model = models.Post
         fields = ('show_bool', 'id', 'title', 'author_name',
-                  'thumbnail_image', 'content_body', 'date_to_show', 'comments')
+                  'thumbnail_image', 'content_body', 'date_to_show', 'comments', 'featured')

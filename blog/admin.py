@@ -9,6 +9,7 @@ from blog import models
 class PostAdmin(admin.ModelAdmin):
     list_display = ['identifier', 'featured', 'show', 'action_show']
     readonly_fields = ['pub_date', 'thumbnail_image_preview']
+    actions = ['toggle_featured']
 
     def thumbnail_image_preview(self, obj):
         return format_html(
@@ -45,6 +46,15 @@ class PostAdmin(admin.ModelAdmin):
         return format_html('<a class="button" href="{}">Toggle Show</a>',
                            reverse('admin:toggle-post-show', args=[obj.pk]))
 
+    def toggle_featured(modeladmin, request, queryset):
+        for post in queryset:
+            if post.featured is True:
+                post.featured = False
+            else:
+                post.featured = True
+            post.save()
+
+    toggle_featured.short_description = 'Toggle Featured'
     action_show.allow_tags = True
     action_show.short_description = "Toggle Show"
 

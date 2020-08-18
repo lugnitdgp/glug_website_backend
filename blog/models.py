@@ -19,6 +19,7 @@ class Post(models.Model):
     pub_date = models.DateTimeField(auto_now_add=True)
     date_to_show = models.DateTimeField(blank=True, null=True)
     show = models.BooleanField(default=True)
+    featured = models.BooleanField(default=False)
 
     def __str__(self):
         return self.identifier
