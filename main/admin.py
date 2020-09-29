@@ -15,6 +15,36 @@ admin.site.site_header = "GLUG Backend | Admin Panel"
 admin.site.site_url = "http://nitdgplug.org/"
 admin.site.index_template = "admin/custom_index.html"
 
+#Linit Admin
+
+
+class LinitImageInline(admin.TabularInline):
+    model = models.LinitImage
+    extra = 1
+
+
+class LinitAdmin(admin.ModelAdmin):
+    list_display = (
+        'title',
+        'description',
+        'image',
+        'year_edition',
+    )
+    inlines = [LinitImageInline]
+
+
+admin.site.register(models.Linit, LinitAdmin)
+
+
+class LinitImageAdmin(admin.ModelAdmin):
+    list_display = ('image', )
+    list_filter = ('linit_year', )
+
+
+admin.site.register(models.LinitImage, LinitImageAdmin)
+
+#Linit Section End
+
 
 class EventAdmin(admin.ModelAdmin):
     list_display = ['identifier', 'status', 'show', 'action_show']
@@ -233,7 +263,9 @@ class CustomUserAdmin(UserAdmin):
 
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ['first_name', 'user', 'email', 'passout_year']
-    actions= ['convert_to_alumni', ]
+    actions = [
+        'convert_to_alumni',
+    ]
 
     def convert_to_alumni(modeladmin, request, queryset):
         for profile in queryset:
@@ -242,9 +274,10 @@ class ProfileAdmin(admin.ModelAdmin):
 
     convert_to_alumni.short_description = 'Convert to Alumni'
 
+
 class AlumniAdmin(admin.ModelAdmin):
     list_display = ['first_name', 'last_name', 'passout_year']
-    
+
 
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
@@ -257,6 +290,5 @@ admin.site.register(models.CarouselImage)
 admin.site.register(models.About)
 admin.site.register(models.Contact)
 admin.site.register(models.Activity)
-admin.site.register(models.Linit)
 admin.site.register(models.Timeline)
 admin.site.register(models.SpecialToken, SpecialTokenAdmin)

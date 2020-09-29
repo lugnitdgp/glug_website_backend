@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets, generics
 from django.contrib.auth.models import User
-from main.models import Event, Profile, Alumni, About, Project, Contact, Activity, CarouselImage, Linit, Timeline
+from main.models import Event, Profile, Alumni, About, Project, Contact, Activity, CarouselImage, Linit, Timeline, LinitImage
 from main import serializers
 from main.forms import ProfileForm, ProfileChangeForm, MemberRegistrationForm
 from django.contrib.auth.forms import UserCreationForm
@@ -80,7 +80,7 @@ class GetCount(APIView):
         events = len(Event.objects.all())
         projects = len(Project.objects.all())
 
-        return Response({"members": members, "alumni": alumni,"events": events, "projects": projects})
+        return Response({"members": members, "alumni": alumni, "events": events, "projects": projects})
 
 
 class EventViewSet(viewsets.ModelViewSet):
@@ -105,6 +105,7 @@ class AlumniViewSet(viewsets.ModelViewSet):
     queryset = Alumni.objects.all().order_by('-passout_year', 'first_name')
     serializer_class = serializers.AlumniSerializer
     http_method_names = ['get']
+
 
 # ViewSets define the view behavior.
 
@@ -161,6 +162,19 @@ class LinitViewSet(viewsets.ModelViewSet):
     queryset = Linit.objects.all()
     serializer_class = serializers.LinitSerializers
     http_method_names = ['get']
+
+
+class LinitPages(APIView):
+    permission_classes = (AllowAny,)
+
+    def get(self, request, format=None):
+        year = request.GET['year']
+        linit = Linit.objects.get(year_edition=int(year))
+        linit_images = LinitImage.objects.filter(linit_year=linit)
+        links = []
+        for image in linit_images:
+            links.append(request.build_absolute_uri(image.image.url))
+        return Response({'links': links})
 
 
 class TimelineViewSet(viewsets.ModelViewSet):
