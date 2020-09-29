@@ -102,7 +102,7 @@ class CarouselImageSerializers(serializers.ModelSerializer):
 class LinitSerializers(serializers.ModelSerializer):
     class Meta:
         model = Linit
-        fields = ('title', 'description', 'image', 'year_edition', 'pdf')
+        fields = ('title', 'description', 'image', 'year_edition')
 
 
 class TimelineSerializers(serializers.ModelSerializer):
