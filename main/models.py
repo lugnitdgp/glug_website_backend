@@ -225,11 +225,13 @@ class Linit(models.Model):
     description = models.TextField(max_length=1024, blank=True, null=True)
     image = models.ImageField(upload_to='linit_images/', blank=True, null=True)
     year_edition = models.IntegerField(default=2018)
-    pdf = models.FileField(upload_to='linit_pdfs/', blank=True, null=True, validators=[validate_pdf_size])
-    pdf_link = models.URLField(null=True, blank=True)
 
     def __str__(self):
         return self.title
+
+class LinitImage(models.Model):
+    linit_year = models.ForeignKey(Linit, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='linit_magzine_images/', blank=True, null=True)
 
 
 class SpecialToken(models.Model):
