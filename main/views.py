@@ -181,3 +181,9 @@ class TimelineViewSet(viewsets.ModelViewSet):
     queryset = Timeline.objects.all().order_by('-event_time')
     serializer_class = serializers.TimelineSerializers
     http_method_names = ['get']
+
+
+class UpcomingEventViewSet(viewsets.ModelViewSet):
+    queryset = Event.objects.all().filter(upcoming=True)
+    serializer_class = serializers.EventSerializer
+    http_method_names = ['get']
