@@ -275,3 +275,27 @@ class Timeline(models.Model):
     #     if not self.id:
     #         self.event_time = timezone.now()
     #     return super(Timeline, self).save(*args, **kwargs)
+
+
+class TechBytes(models.Model):
+    title = models.CharField(max_length=128)
+    image = models.ImageField(upload_to='tb_images/', null=True, blank=True, validators=[validate_image_size])
+    body = RichTextField()
+    pub_date = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
+    
+    class Meta:
+        verbose_name_plural = "TechBytes Posts"
+
+
+class DevPost(models.Model):
+    title = models.CharField(max_length=128)
+    image = models.ImageField(upload_to='dev_images/', null=True, blank=True, validators=[validate_image_size])
+    dev_link = models.URLField(blank=False)
+    body = RichTextField()
+    pub_date = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
