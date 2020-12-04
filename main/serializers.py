@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from main.models import Event, Profile, Alumni, About, Project, Contact, Activity, CarouselImage, Linit, Timeline
+from main.models import Event, Profile, Alumni, About, Project, Contact, Activity, CarouselImage, Linit, Timeline, TechBytes, DevPost
 import datetime
 
 
@@ -108,4 +108,16 @@ class LinitSerializers(serializers.ModelSerializer):
 class TimelineSerializers(serializers.ModelSerializer):
     class Meta:
         model = Timeline
+        fields = '__all__'
+
+
+class TechBytesSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = TechBytes
+        fields = '__all__'
+
+
+class DevPostSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = DevPost
         fields = '__all__'

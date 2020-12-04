@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets, generics
 from django.contrib.auth.models import User
-from main.models import Event, Profile, Alumni, About, Project, Contact, Activity, CarouselImage, Linit, Timeline, LinitImage
+from main.models import Event, Profile, Alumni, About, Project, Contact, Activity, CarouselImage, Linit, Timeline, LinitImage, TechBytes, DevPost
 from main import serializers
 from main.forms import ProfileForm, ProfileChangeForm, MemberRegistrationForm
 from django.contrib.auth.forms import UserCreationForm
@@ -186,4 +186,15 @@ class TimelineViewSet(viewsets.ModelViewSet):
 class UpcomingEventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all().filter(upcoming=True)
     serializer_class = serializers.EventSerializer
+    http_method_names = ['get']
+
+
+class TechBytesViewSet(viewsets.ModelViewSet):
+    queryset = TechBytes.objects.all()
+    serializer_class = serializers.TechBytesSerializers
+    http_method_names = ['get']
+
+class DevPostViewSet(viewsets.ModelViewSet):
+    queryset = DevPost.objects.all()
+    serializer_class = serializers.DevPostSerializers
     http_method_names = ['get']

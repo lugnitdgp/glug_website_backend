@@ -19,6 +19,8 @@ router.register(r'carousel', views.CarouselImageViewSet)
 router.register(r'linit', views.LinitViewSet)
 router.register(r'timeline', views.TimelineViewSet)
 router.register(r'alumni', views.AlumniViewSet)
+router.register(r'techbytes', views.TechBytesViewSet)
+router.register(r'devposts', views.DevPostViewSet)
 
 urlpatterns = router.urls
 
