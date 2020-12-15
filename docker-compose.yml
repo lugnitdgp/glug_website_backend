@@ -26,8 +26,8 @@ services:
       --run-syncdb && python3 manage.py collectstatic --no-input && 
       gunicorn glug_website.wsgi:application --workers 3 --bind 0.0.0.0:8000"
     volumes:
-      - 'web-media:${LOC}/media'
-      - 'web-static:${LOC}/static'
+      - 'web-media:/app/backend/media'
+      - 'web-static:/app/backend/static'
     ports:
       - 8000:8000
     env_file:
@@ -36,6 +36,14 @@ services:
       - db
 
 volumes:
-  web-media:
   postgres_data:
+  web-media:
+    driver_opts:
+      o: bind
+      type: none
+      device: ${LOC}/media
   web-static:
+    driver_opts:
+      o: bind
+      type: none
+      device: ${LOC}/static
