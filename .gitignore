@@ -11,6 +11,7 @@ __pycache__/
 local_settings.py
 
 .env
+.db.env
 db.sqlite3
 db.sqlite3-*
 main/media/*

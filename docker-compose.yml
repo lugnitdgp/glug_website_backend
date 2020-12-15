@@ -4,32 +4,46 @@ services:
   
   db:
     image: postgres:12
-    restart: always
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
     volumes:
       - 'postgres_data:/var/lib/postgresql/data/'
-    environment: 
-      - POSTGRES_USER=dbuser
-      - POSTGRES_PASSWORD=dbpassword
-      - POSTGRES_DB=dbname
+    env_file:
+      ./.db.env
 
   web:
-    build: ./backend
-    restart: always
+    build: ./
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
     command: >-
       bash -c "python3 manage.py makemigrations && python3 manage.py migrate
       --run-syncdb && python3 manage.py collectstatic --no-input && 
-      gunicorn glug_website.wsgi:application --bind 0.0.0.0:8000"
+      gunicorn glug_website.wsgi:application --workers 3 --bind 0.0.0.0:8000"
     volumes:
-      - 'web-django:/usr/src/backend'
-      - 'web-static:/usr/src/backend/static'
+      - 'web-media:/app/backend/media'
+      - 'web-static:/app/backend/static'
     ports:
-      - '8000:8000'
+      - 8000:8000
     env_file:
-      - ./backend/.env
+      - ./.env
     depends_on:
       - db
 
 volumes:
-  web-django:
   postgres_data:
+  web-media:
+    driver_opts:
+      o: bind
+      type: none
+      device: ${LOC}/media
   web-static:
+    driver_opts:
+      o: bind
+      type: none
+      device: ${LOC}/static
