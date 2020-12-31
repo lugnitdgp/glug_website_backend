@@ -50,12 +50,6 @@ jobs:
                 cd ~/www/glug_website_backend
                 git checkout prod
                 git pull origin prod
-                source ../env/bin/activate
-                pip install -U -r requirements.txt
-                python manage.py makemigrations
-                python manage.py migrate --run-syncdb
-                python manage.py collectstatic --noinput
-                sudo systemctl restart website-backend.service
-                deactivate
+                sudo docker-compose up -d --build
                 cd ~
                 sudo systemctl restart nginx
