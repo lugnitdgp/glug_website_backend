@@ -10,7 +10,7 @@ services:
         delay: 5s
         max_attempts: 3
     volumes:
-      - 'postgres_data:/var/lib/postgresql/data/'
+      - ./postgres_data:/var/lib/postgresql/data/
     env_file:
       ./.db.env
 
@@ -26,8 +26,8 @@ services:
       --run-syncdb && python3 manage.py collectstatic --no-input && 
       gunicorn glug_website.wsgi:application --workers 3 --bind 0.0.0.0:8000"
     volumes:
-      - 'web-media:/app/backend/media'
-      - 'web-static:/app/backend/static'
+      - ./media:/app/backend/media:rw
+      - ./static:/app/backend/static:rw
     ports:
       - 8000:8000
     env_file:
@@ -37,13 +37,13 @@ services:
 
 volumes:
   postgres_data:
-  web-media:
-    driver_opts:
-      o: bind
-      type: none
-      device: ${LOC}/media
-  web-static:
-    driver_opts:
-      o: bind
-      type: none
-      device: ${LOC}/static
+  # web-media:
+  #   driver_opts:
+  #     o: bind
+  #     type: none
+  #     device: ${LOC}/media
+  # web-static:
+  #   driver_opts:
+  #     o: bind
+  #     type: none
+  #     device: ${LOC}/static

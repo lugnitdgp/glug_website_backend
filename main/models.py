@@ -299,3 +299,11 @@ class DevPost(models.Model):
 
     def __str__(self):
         return self.title
+
+class Config(models.Model):
+    key = models.CharField(max_length=64, unique=True)
+    value = models.CharField(max_length=1024)
+    enable = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.key

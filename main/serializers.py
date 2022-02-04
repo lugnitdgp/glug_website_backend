@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from main.models import Event, Profile, Alumni, About, Project, Contact, Activity, CarouselImage, Linit, Timeline, TechBytes, DevPost
+from main.models import Config, Event, Profile, Alumni, About, Project, Contact, Activity, CarouselImage, Linit, Timeline, TechBytes, DevPost
 import datetime
 
 
@@ -121,3 +121,9 @@ class DevPostSerializers(serializers.ModelSerializer):
     class Meta:
         model = DevPost
         fields = '__all__'
+
+
+class ConfigSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Config
+        fields = ('key', 'value', 'enable')

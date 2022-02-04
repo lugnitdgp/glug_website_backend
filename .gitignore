@@ -25,10 +25,10 @@ static/*
 ##
 dump.json
 ##
-main/migrations/00*
+main/migrations/*
 ##
-blog/migrations/00*
+blog/migrations/*
 ##
-mailer/migrations/00*
+mailer/migrations/*
 Pipfile
 Pipfile.lock
