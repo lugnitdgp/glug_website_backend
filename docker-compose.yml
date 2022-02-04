@@ -10,7 +10,7 @@ services:
         delay: 5s
         max_attempts: 3
     volumes:
-      - ./postgres_data:/var/lib/postgresql/data/
+      - 'postgres_data:/var/lib/postgresql/data/'
     env_file:
       ./.db.env
 
