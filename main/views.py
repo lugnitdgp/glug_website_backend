@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets, generics
 from django.contrib.auth.models import User
-from main.models import Event, Profile, Alumni, About, Project, Contact, Activity, CarouselImage, Linit, Timeline, LinitImage, TechBytes, DevPost
+from main.models import Config, Event, Profile, Alumni, About, Project, Contact, Activity, CarouselImage, Linit, Timeline, LinitImage, TechBytes, DevPost
 from main import serializers
 from main.forms import ProfileForm, ProfileChangeForm, MemberRegistrationForm
 from django.contrib.auth.forms import UserCreationForm
@@ -197,4 +197,10 @@ class TechBytesViewSet(viewsets.ModelViewSet):
 class DevPostViewSet(viewsets.ModelViewSet):
     queryset = DevPost.objects.all()
     serializer_class = serializers.DevPostSerializers
+    http_method_names = ['get']
+
+
+class ConfigViewSet(viewsets.ModelViewSet):
+    queryset = Config.objects.all()
+    serializer_class = serializers.ConfigSerializers
     http_method_names = ['get']

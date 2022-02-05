@@ -21,6 +21,7 @@ router.register(r'timeline', views.TimelineViewSet)
 router.register(r'alumni', views.AlumniViewSet)
 router.register(r'techbytes', views.TechBytesViewSet)
 router.register(r'devposts', views.DevPostViewSet)
+router.register(r'configs', views.ConfigViewSet)
 
 urlpatterns = router.urls
 
