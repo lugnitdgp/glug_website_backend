@@ -42,12 +42,14 @@ jobs:
     - name: Run check
       run: python manage.py check      
     - name: Running remote SSH commands
-      uses: JimCronqvist/action-ssh@master
+      uses: appleboy/ssh-action@master
       with:
-        hosts: ${{ secrets.HOST }}
-        privatekey: ${{ secrets.SSHKEY }}
-        command: |
-                cd ~/www/glug_website_backend
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        script: |
+                cd /home/glugwebsite/glug_website_backend
                 git checkout prod
                 git pull origin prod
                 sudo docker-compose up -d --build
