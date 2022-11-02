@@ -4,14 +4,14 @@ from django.contrib.auth.models import User
 from main.models import Config, Event, Profile, Alumni, About, Project, Contact, Activity, CarouselImage, Linit, Timeline, LinitImage, TechBytes, DevPost
 from main import serializers
 from main.forms import ProfileForm, ProfileChangeForm, MemberRegistrationForm
-from django.contrib.auth.forms import UserCreationForm
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.urls import reverse, NoReverseMatch
+from django.urls import reverse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
+from collections import defaultdict
 
 
 def register(request):
@@ -108,7 +108,16 @@ class AlumniViewSet(viewsets.ModelViewSet):
 
 
 # ViewSets define the view behavior.
-
+class AlumniByYearViewSet(viewsets.ModelViewSet):
+    queryset = Alumni.objects.all().order_by('-passout_year', 'first_name')
+    serializer_class = serializers.AlumniSerializer
+    http_method_names = ['get']
+    def list(self,request):
+        data = defaultdict(list)
+        alumunus = self.queryset
+        for alumni in alumunus :
+            data[alumni.passout_year].append(self.serializer_class(alumni).data)
+        return Response(data)
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
