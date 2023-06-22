@@ -6,7 +6,7 @@ from django.utils.crypto import get_random_string
 from django.utils import timezone
 import datetime
 from django.forms.models import model_to_dict
-
+from rest_framework import serializers
 
 def validate_pdf_size(value):
     limit = 100 * 1024 * 1024
@@ -80,6 +80,40 @@ def year_choices():
     return [(y, y) for y in range(cuur_year, cuur_year + 4 + 1)]
 
 
+class Alumni(models.Model):
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+
+    # Choices of degree
+    DEGREE = (
+        ('BTECH', 'B.Tech'),
+        ('MCA', 'MCA'),
+        ('MTECH', 'M.Tech'),
+    )
+
+    alias = models.CharField(max_length=64, blank=True, null=True)
+    bio = models.TextField(max_length=512, blank=True, null=True)
+    image = models.ImageField(upload_to='alumni_images/', blank=True, null=True, validators=[validate_image_size])
+    email = models.EmailField(blank=True, null=True)
+    phone_number = models.CharField(max_length=14, blank=True, null=True)
+    degree_name = models.CharField(max_length=64, choices=DEGREE)
+    passout_year = models.IntegerField(default=2018)
+    position = models.CharField(max_length=255, blank=True, null=True)
+
+    git_link = models.URLField(null=True, blank=True)
+    facebook_link = models.URLField(null=True, blank=True)
+    twitter_link = models.URLField(null=True, blank=True)
+    reddit_link = models.URLField(null=True, blank=True)
+    linkedin_link = models.URLField(null=True, blank=True)
+
+    def __str__(self):
+        return (self.first_name + " " + self.last_name)
+
+    class Meta:
+        verbose_name_plural = "Alumni"
+
+
+
 class Profile(models.Model):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
@@ -123,50 +157,26 @@ class Profile(models.Model):
         Checks if the profile belongs to an alumni or not and converts to alumni if True
         """
         if self.convert_to_alumni == True:
-            initial_data = model_to_dict(self)
-            if self.user is not None: self.user.is_active = False
-            self.user.save()
-            initial_data.pop('convert_to_alumni', None)
-            initial_data.pop('user', None)
-            alumni = Alumni(**initial_data)
-            alumni.save()
-            self.delete()
-            return
+                class AlumniSerializer(serializers.ModelSerializer):
+                    class Meta:
+                     model = Alumni
+                     fields = '__all__'
+
+                # Converting the Profile instance to Alumni instance
+                alumni_data = AlumniSerializer(self).data
+
+                # Creating a new Alumni instance from the serialized data
+                alumni_serializer = AlumniSerializer(data=alumni_data)
+                alumni_serializer.is_valid(raise_exception=True)
+                alumni_serializer.save()
+
+                # Deleting the Profile instance after converting it to Alumni
+                self.delete()
+                return
         else: 
             super(Profile, self).save(*args, **kwargs)
 
 
-class Alumni(models.Model):
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
-
-    # Choices of degree
-    DEGREE = (
-        ('BTECH', 'B.Tech'),
-        ('MCA', 'MCA'),
-        ('MTECH', 'M.Tech'),
-    )
-
-    alias = models.CharField(max_length=64, blank=True, null=True)
-    bio = models.TextField(max_length=512, blank=True, null=True)
-    image = models.ImageField(upload_to='alumni_images/', blank=True, null=True, validators=[validate_image_size])
-    email = models.EmailField(blank=True, null=True)
-    phone_number = models.CharField(max_length=14, blank=True, null=True)
-    degree_name = models.CharField(max_length=64, choices=DEGREE)
-    passout_year = models.IntegerField(default=2018)
-    position = models.CharField(max_length=255, blank=True, null=True)
-
-    git_link = models.URLField(null=True, blank=True)
-    facebook_link = models.URLField(null=True, blank=True)
-    twitter_link = models.URLField(null=True, blank=True)
-    reddit_link = models.URLField(null=True, blank=True)
-    linkedin_link = models.URLField(null=True, blank=True)
-
-    def __str__(self):
-        return (self.first_name + " " + self.last_name)
-
-    class Meta:
-        verbose_name_plural = "Alumni"
 
 
 class CarouselImage(models.Model):

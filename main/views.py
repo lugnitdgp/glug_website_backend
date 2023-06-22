@@ -109,13 +109,18 @@ class AlumniViewSet(viewsets.ModelViewSet):
 
 # ViewSets define the view behavior.
 class AlumniByYearViewSet(viewsets.ModelViewSet):
-    queryset = Alumni.objects.all().order_by('-passout_year', 'first_name')
     serializer_class = serializers.AlumniSerializer
     http_method_names = ['get']
-    def list(self,request):
+    #  We use the get_queryset() method instead of assigning a fixed queryset attribute 
+    # such that the queryset is updated dynamically each time the view is accessed.
+    def get_queryset(self):
+        queryset = Alumni.objects.all().order_by('-passout_year', 'first_name')
+        return queryset
+
+    def list(self, request, *args, **kwargs):
         data = defaultdict(list)
-        alumunus = self.queryset
-        for alumni in alumunus :
+        queryset = self.get_queryset()
+        for alumni in queryset:
             data[alumni.passout_year].append(self.serializer_class(alumni).data)
         return Response(data)
 
