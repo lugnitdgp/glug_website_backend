@@ -17,7 +17,7 @@ db.sqlite3-*
 main/media/*
 media/*
 
-
+env
 ##
 db.json
 ##
