@@ -194,13 +194,17 @@ class LinitPages(APIView):
 
 
 class TimelineViewSet(viewsets.ModelViewSet):
+    queryset = Timeline.objects.all().order_by('-event_time')
+    serializer_class = serializers.TimelineSerializers
+    http_method_names = ['get']
+
+class MonthlyTimelineViewSet(viewsets.ModelViewSet):
     queryset = Timeline.objects.all()
     serializer_class = serializers.TimelineSerializers
     http_method_names = ['get']
     def get_queryset(self):
         queryset = super().get_queryset()
-        # Order by the month of the date_field
-        return queryset.order_by('event_time')
+        return queryset.order_by('-event_time')
     
     def group_by_month_year(self, queryset):
         current_year= date.today().year

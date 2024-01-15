@@ -18,6 +18,7 @@ router.register(r'activity', views.ActivityViewSet)
 router.register(r'carousel', views.CarouselImageViewSet)
 router.register(r'linit', views.LinitViewSet)
 router.register(r'timeline', views.TimelineViewSet)
+router.register(r'timeline_monthly', views.MonthlyTimelineViewSet)
 router.register(r'alumni', views.AlumniViewSet)
 # In the latest DRF, We need to explicitly set base_name in our viewset url if we don't have queryset defined.
 router.register(r'alumni-by-year', views.AlumniByYearViewSet, basename="alumnibyyear")
@@ -36,3 +37,4 @@ urlpatterns += [
     path('get_count/', views.GetCount.as_view(), name="get_count"),
     path('linit-pages/', views.LinitPages.as_view(), name="linit-pages"),
 ]
+
