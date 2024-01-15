@@ -1,3 +1,5 @@
+from calendar import month_name
+from datetime import date
 from django.shortcuts import render
 from rest_framework import viewsets, generics
 from django.contrib.auth.models import User
@@ -192,10 +194,28 @@ class LinitPages(APIView):
 
 
 class TimelineViewSet(viewsets.ModelViewSet):
-    queryset = Timeline.objects.all().order_by('-event_time')
+    queryset = Timeline.objects.all()
     serializer_class = serializers.TimelineSerializers
     http_method_names = ['get']
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        # Order by the month of the date_field
+        return queryset.order_by('event_time')
+    
+    def group_by_month_year(self, queryset):
+        current_year= date.today().year
+        
+        result = {f"{month} {year}": [] for year in range(current_year, current_year-3, -1) for month in month_name[1:]}
+        for obj in queryset:
+            
+                month_year = obj.event_time.strftime("%B %Y")
+                result.setdefault(month_year, []).append(serializers.TimelineSerializers(obj).data)
+        return result
 
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        grouped_by_month_year = self.group_by_month_year(queryset)
+        return Response(grouped_by_month_year)
 
 class UpcomingEventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all().filter(upcoming=True)
