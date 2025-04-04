@@ -274,6 +274,8 @@ class ProfileAdmin(admin.ModelAdmin):
 
     convert_to_alumni.short_description = 'Convert to Alumni'
 
+class FacadAdmin(admin.ModelAdmin):
+    list_display = ['first_name', 'last_name', 'post', 'email']
 
 class AlumniAdmin(admin.ModelAdmin):
     list_display = ['first_name', 'last_name', 'passout_year']

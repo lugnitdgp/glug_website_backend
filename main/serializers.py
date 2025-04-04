@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from main.models import Config, Event, Profile, Alumni, About, Project, Contact, Activity, CarouselImage, Linit, Timeline, TechBytes, DevPost
+from main.models import Config, Event, Profile, Facad, Alumni, About, Project, Contact, Activity, CarouselImage, Linit, Timeline, TechBytes, DevPost
 import datetime
 
 
@@ -60,6 +60,11 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = ('id', 'user_name', 'first_name', 'last_name', 'alias', 'bio', 'year_name', 'position', 'email',
                   'image', 'degree_name', 'git_link', 'facebook_link', 'reddit_link', 'linkedin_link')
 
+class FacadSerializer(serializers.ModelSerializer):
+    """Faculty Advisor serializer"""
+    class Meta:
+        model = Facad
+        fields = ('id', 'post', 'first_name', 'last_name', 'linkedin_link', 'email')
 
 class AlumniSerializer(serializers.ModelSerializer):
     """Alumni Profile serializer"""

@@ -79,6 +79,20 @@ def year_choices():
     cuur_year = datetime.date.today().year
     return [(y, y) for y in range(cuur_year, cuur_year + 4 + 1)]
 
+class Facad(models.Model):
+    """Faculty Advisor model"""
+    post = models.CharField(max_length=100)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    linkedin_link = models.URLField(max_length=200, blank=True, null=True)
+    email = models.EmailField(max_length=254)
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} - {self.post}"
+
+    class Meta:
+        verbose_name = "Faculty Advisor"
+        verbose_name_plural = "Faculty Advisors"
 
 class Alumni(models.Model):
     first_name = models.CharField(max_length=255)
