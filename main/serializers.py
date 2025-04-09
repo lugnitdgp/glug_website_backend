@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from main.models import Config, Event, Profile, Facad, Alumni, About, Project, Contact, Activity, CarouselImage, Linit, Timeline, TechBytes, DevPost
 import datetime
+import markdown
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -13,6 +14,7 @@ class UserSerializer(serializers.ModelSerializer):
 class EventSerializer(serializers.ModelSerializer):
     """Event fields serializer"""
     show_bool = serializers.SerializerMethodField('check_show')
+    description_markdown = serializers.SerializerMethodField()
 
     def check_show(self, obj):
         if obj.show == False:
@@ -33,9 +35,14 @@ class EventSerializer(serializers.ModelSerializer):
         elif obj.show == True:
             return True
 
+    def get_description_markdown(self, obj):
+        if obj.description:
+            return markdown.markdown(obj.description)
+        return None
+
     class Meta:
         model = Event
-        fields = ('show_bool', 'id', 'identifier', 'title', 'description', 'venue', 'url', 'event_timing',
+        fields = ('show_bool', 'id', 'identifier', 'title', 'description', 'description_markdown', 'venue', 'url', 'event_timing',
                   'facebook_link', 'event_image', 'status', 'featured', 'upcoming')
 
 
@@ -81,9 +88,16 @@ class AboutSerializer(serializers.ModelSerializer):
 
 
 class ProjectSerializers(serializers.ModelSerializer):
+    description_markdown = serializers.SerializerMethodField()
+
+    def get_description_markdown(self, obj):
+        if obj.description:
+            return markdown.markdown(obj.description)
+        return None
+
     class Meta:
         model = Project
-        fields = ('identifier', 'title', 'description', 'gitlink')
+        fields = ('id', 'identifier', 'title', 'description', 'description_markdown', 'gitlink')
 
 
 class ContactSerializers(serializers.ModelSerializer):
