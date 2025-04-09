@@ -64,7 +64,7 @@ class FacadSerializer(serializers.ModelSerializer):
     """Faculty Advisor serializer"""
     class Meta:
         model = Facad
-        fields = ('id', 'post', 'first_name', 'last_name', 'linkedin_link', 'email')
+        fields = ('id', 'post', 'first_name', 'last_name', 'linkedin_link', 'email', 'image')
 
 class AlumniSerializer(serializers.ModelSerializer):
     """Alumni Profile serializer"""
