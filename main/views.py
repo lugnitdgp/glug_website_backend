@@ -3,7 +3,7 @@ from datetime import date
 from django.shortcuts import render
 from rest_framework import viewsets, generics
 from django.contrib.auth.models import User
-from main.models import Config, Event, Profile, Alumni, About, Project, Contact, Activity, CarouselImage, Linit, Timeline, LinitImage, TechBytes, DevPost
+from main.models import Config, Event, Profile, Facad, Alumni, About, Project, Contact, Activity, CarouselImage, Linit, Timeline, LinitImage, TechBytes, DevPost
 from main import serializers
 from main.forms import ProfileForm, ProfileChangeForm, MemberRegistrationForm
 from django.http import HttpResponseRedirect
@@ -102,6 +102,13 @@ class ProfileViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ProfileSerializer
     http_method_names = ['get']
 
+class FacadViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows faculty advisors to be viewed or edited.
+    """
+    queryset = Facad.objects.all()
+    serializer_class = serializers.FacadSerializer
+    http_method_names = ['get']
 
 class AlumniViewSet(viewsets.ModelViewSet):
     queryset = Alumni.objects.all().order_by('-passout_year', 'first_name')
