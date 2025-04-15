@@ -274,6 +274,8 @@ class ProfileAdmin(admin.ModelAdmin):
 
     convert_to_alumni.short_description = 'Convert to Alumni'
 
+class FacadAdmin(admin.ModelAdmin):
+    list_display = ['first_name', 'last_name', 'post', 'email','image']
 
 class AlumniAdmin(admin.ModelAdmin):
     list_display = ['first_name', 'last_name', 'passout_year']
@@ -285,6 +287,7 @@ admin.site.register(User, CustomUserAdmin)
 admin.site.register(models.Event, EventAdmin)
 admin.site.register(models.Project)
 admin.site.register(models.Profile, ProfileAdmin)
+admin.site.register(models.Facad, FacadAdmin)
 admin.site.register(models.Alumni, AlumniAdmin)
 admin.site.register(models.CarouselImage)
 admin.site.register(models.About)

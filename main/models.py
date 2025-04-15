@@ -27,7 +27,10 @@ class Event(models.Model):
     identifier = models.CharField(max_length=64, unique=True, help_text="Unique Identifier for events")
     title = models.CharField(max_length=255)
     event_image = models.ImageField(upload_to='event_images/', null=True, blank=True, validators=[validate_image_size])
-    description = RichTextField(blank=True, null=True)
+    description = models.TextField( blank=True, null=True)
+    # description = RichTextField(blank=True, null=True)
+    # description = MarkdownField(rendered_field='rendered', validator=VALIDATOR_STANDARD)
+    # rendered = RenderedMarkdownField()
 
     # Choices of status
     STATUS = (
@@ -79,6 +82,21 @@ def year_choices():
     cuur_year = datetime.date.today().year
     return [(y, y) for y in range(cuur_year, cuur_year + 4 + 1)]
 
+class Facad(models.Model):
+    """Faculty Advisor model"""
+    post = models.CharField(max_length=100)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    linkedin_link = models.URLField(max_length=200, blank=True, null=True)
+    email = models.EmailField(max_length=254)
+    image = models.ImageField(upload_to='facad_images/', blank=True, null=True, validators=[validate_image_size])
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} - {self.post}"
+
+    class Meta:
+        verbose_name = "Faculty Advisor"
+        verbose_name_plural = "Faculty Advisors"
 
 class Alumni(models.Model):
     first_name = models.CharField(max_length=255)
@@ -197,7 +215,9 @@ class About(models.Model):
     identifier = models.CharField(max_length=64, unique=True)
     # remove blank and null after test
     heading = models.CharField(max_length=255, blank=True, null=True)
-    content = RichTextField()
+    content = RichTextField(blank=True, null=True)
+    # content = MarkdownField(rendered_field='rendered', validator=VALIDATOR_STANDARD)
+    # rendered = RenderedMarkdownField()
 
     def __str__(self):
         return self.identifier
@@ -206,7 +226,10 @@ class About(models.Model):
 class Project(models.Model):
     identifier = models.CharField(max_length=64, unique=True)
     title = models.CharField(max_length=512)
-    description = RichTextField()
+    description = models.TextField(blank=True, null=True)
+    # description = RichTextField(blank=True, null=True)
+    # description = MarkdownField(rendered_field='rendered', validator=VALIDATOR_STANDARD)
+    # rendered = RenderedMarkdownField()
     gitlink = models.URLField(null=True, blank=True)
 
 
@@ -275,7 +298,9 @@ class SpecialToken(models.Model):
 
 class Timeline(models.Model):
     event_name = models.CharField(max_length=120)
-    detail = RichTextField()
+    detail = RichTextField(blank=True, null=True)
+    # detail = MarkdownField(rendered_field='rendered', validator=VALIDATOR_STANDARD)
+    # rendered = RenderedMarkdownField()
     event_time = models.DateField(blank=True, auto_now_add=False)
 
     def __str__(self):
@@ -290,7 +315,9 @@ class Timeline(models.Model):
 class TechBytes(models.Model):
     title = models.CharField(max_length=128)
     image = models.ImageField(upload_to='tb_images/', null=True, blank=True, validators=[validate_image_size])
-    body = RichTextField()
+    body = models.TextField(blank=True, null=True)
+    # body = MarkdownField(rendered_field='rendered', validator=VALIDATOR_STANDARD)
+    # rendered = RenderedMarkdownField()
     pub_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
@@ -304,7 +331,9 @@ class DevPost(models.Model):
     title = models.CharField(max_length=128)
     image = models.ImageField(upload_to='dev_images/', null=True, blank=True, validators=[validate_image_size])
     dev_link = models.URLField(blank=False)
-    body = RichTextField()
+    body = RichTextField(blank=True, null=True)
+    # body = MarkdownField(rendered_field='rendered', validator=VALIDATOR_STANDARD)
+    # rendered = RenderedMarkdownField()
     pub_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):

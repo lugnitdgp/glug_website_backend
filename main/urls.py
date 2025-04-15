@@ -20,6 +20,7 @@ router.register(r'linit', views.LinitViewSet)
 router.register(r'timeline', views.TimelineViewSet)
 router.register(r'timeline_monthly', views.MonthlyTimelineViewSet)
 router.register(r'alumni', views.AlumniViewSet)
+router.register(r'facads', views.FacadViewSet)
 # In the latest DRF, We need to explicitly set base_name in our viewset url if we don't have queryset defined.
 router.register(r'alumni-by-year', views.AlumniByYearViewSet, basename="alumnibyyear")
 router.register(r'techbytes', views.TechBytesViewSet)

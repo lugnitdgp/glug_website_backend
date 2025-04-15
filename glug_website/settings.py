@@ -167,3 +167,5 @@ EMAIL_PORT = config('EMAIL_PORT', default=587)
 EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='None')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='None')
 EMAIL_USE_TLS = True
+
+SITE_URL = config('SITE_URL', default='http://localhost:8000')
