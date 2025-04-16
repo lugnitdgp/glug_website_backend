@@ -295,12 +295,33 @@ class FacadAdmin(admin.ModelAdmin):
 class AlumniAdmin(admin.ModelAdmin):
     list_display = ['first_name', 'last_name', 'passout_year']
 
+class ProjectAdmin(admin.ModelAdmin):
+    """Admin interface for Project model"""
+    list_display = ('title', 'identifier', 'gitlink', 'hosted_link')
+    list_filter = ('identifier',)
+    search_fields = ('title', 'description', 'identifier')
+    ordering = ('title',)
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('identifier', 'title', 'description')
+        }),
+        ('Links', {
+            'fields': ('gitlink', 'image_link', 'hosted_link'),
+            'description': 'Project related links including GitHub, image and hosted version'
+        }),
+    )
+
+    def clean_image_link(self, obj):
+        """Validate image link format"""
+        if obj.image_link and not any(obj.image_link.lower().endswith(ext) for ext in ['.jpg', '.jpeg', '.png', '.gif']):
+            raise ValidationError('URL must point to an image file')
 
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
-
+admin.site.register(models.Project, ProjectAdmin)
 admin.site.register(models.Event, EventAdmin)
-admin.site.register(models.Project)
+# admin.site.register(models.Project)
 admin.site.register(models.Profile, ProfileAdmin)
 admin.site.register(models.Facad, FacadAdmin)
 admin.site.register(models.Alumni, AlumniAdmin)

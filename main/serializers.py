@@ -115,7 +115,7 @@ class ProjectSerializers(serializers.ModelSerializer):
 
     class Meta:
         model = Project
-        fields = ('id', 'identifier', 'title', 'description', 'description_markdown', 'gitlink')
+        fields = ('id', 'identifier', 'title', 'description', 'description_markdown', 'gitlink','image_link' , 'hosted_link')
 
 
 class ContactSerializers(serializers.ModelSerializer):

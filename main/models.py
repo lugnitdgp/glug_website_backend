@@ -281,22 +281,34 @@ class Project(models.Model):
     gitlink = models.URLField(null=True, blank=True)
     
     # Added image field matching TechBytes style
-    image = models.ImageField(
-        upload_to='project_images/%Y/%m/%d/',  # Organizes by date
-        null=True,
+    # image = models.ImageField(
+    #     upload_to='project_images/%Y/%m/%d/',  # Organizes by date
+    #     null=True,
+    #     blank=True,
+    #     validators=[validate_image_size],
+    #     help_text='Upload project image (max 2MB)'
+    # )
+    image_link = models.URLField(
+        max_length=500,
+        help_text="Cloudinary URL of the project image",
         blank=True,
-        validators=[validate_image_size],
-        help_text='Upload project image (max 2MB)'
+        null=True
+    )
+    hosted_link = models.URLField(
+        max_length=500,
+        help_text="Cloudinary URL of the hosted project",
+        blank=True,
+        null=True
     )
 
     def __str__(self):
         return self.title
 
-    def delete(self, *args, **kwargs):
-        """Delete image file when project is deleted"""
-        if self.image:
-            self.image.delete(save=False)
-        super().delete(*args, **kwargs)
+    # def delete(self, *args, **kwargs):
+    #     """Delete image file when project is deleted"""
+    #     if self.image:
+    #         self.image.delete(save=False)
+    #     super().delete(*args, **kwargs)
 
 
 class Contact(models.Model):
@@ -329,10 +341,6 @@ class Linit(models.Model):
         null=True
     )
     year_edition = models.IntegerField(default=2018)
-
-    def clean(self):
-        if self.document_url and not self.document_url.endswith('.pdf'):
-            raise ValidationError('URL must point to a PDF document')
 
     def __str__(self):
         return self.title
