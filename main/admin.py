@@ -7,6 +7,7 @@ from django.utils.html import escape
 from django.urls import reverse, NoReverseMatch, path
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
+from django.core.exceptions import ValidationError
 from django.contrib.sessions.models import Session
 from django.contrib.contenttypes.models import ContentType
 from django.utils.crypto import get_random_string
@@ -14,6 +15,7 @@ from django.utils.crypto import get_random_string
 admin.site.site_header = "GLUG Backend | Admin Panel"
 admin.site.site_url = "http://nitdgplug.org/"
 admin.site.index_template = "admin/custom_index.html"
+
 
 #Linit Admin
 
@@ -24,12 +26,16 @@ class LinitImageInline(admin.TabularInline):
 
 
 class LinitAdmin(admin.ModelAdmin):
-    list_display = (
-        'title',
-        'description',
-        'image',
-        'year_edition',
-    )
+    list_display = ('title', 'year_edition', 'document_url')
+    list_filter = ('year_edition',)
+    search_fields = ('title', 'description')
+    ordering = ('-year_edition',)
+
+    def clean_document_url(self, obj):
+        """Validate document URL format"""
+        if obj.document_url and not obj.document_url.endswith('.pdf'):
+            raise ValidationError('URL must point to a PDF document')
+    
     inlines = [LinitImageInline]
 
 
@@ -267,6 +273,15 @@ class ProfileAdmin(admin.ModelAdmin):
         'convert_to_alumni',
     ]
 
+
+class CTFAdmin(admin.ModelAdmin):
+    list_display = ('name', 'link', 'photo_preview')
+    search_fields = ('name', 'description')
+    
+    def photo_preview(self, obj):
+        return format_html('<img src="{}" width="100" height="auto" />', obj.photo.url) if obj.photo else "-"
+    
+    photo_preview.short_description = 'Photo Preview'
     def convert_to_alumni(modeladmin, request, queryset):
         for profile in queryset:
             profile.convert_to_alumni = True
@@ -280,12 +295,33 @@ class FacadAdmin(admin.ModelAdmin):
 class AlumniAdmin(admin.ModelAdmin):
     list_display = ['first_name', 'last_name', 'passout_year']
 
+class ProjectAdmin(admin.ModelAdmin):
+    """Admin interface for Project model"""
+    list_display = ('title', 'identifier', 'gitlink', 'hosted_link')
+    list_filter = ('identifier',)
+    search_fields = ('title', 'description', 'identifier')
+    ordering = ('title',)
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('identifier', 'title', 'description')
+        }),
+        ('Links', {
+            'fields': ('gitlink', 'image_link', 'hosted_link'),
+            'description': 'Project related links including GitHub, image and hosted version'
+        }),
+    )
+
+    def clean_image_link(self, obj):
+        """Validate image link format"""
+        if obj.image_link and not any(obj.image_link.lower().endswith(ext) for ext in ['.jpg', '.jpeg', '.png', '.gif']):
+            raise ValidationError('URL must point to an image file')
 
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
-
+admin.site.register(models.Project, ProjectAdmin)
 admin.site.register(models.Event, EventAdmin)
-admin.site.register(models.Project)
+# admin.site.register(models.Project)
 admin.site.register(models.Profile, ProfileAdmin)
 admin.site.register(models.Facad, FacadAdmin)
 admin.site.register(models.Alumni, AlumniAdmin)
@@ -298,3 +334,5 @@ admin.site.register(models.SpecialToken, SpecialTokenAdmin)
 admin.site.register(models.TechBytes)
 admin.site.register(models.DevPost)
 admin.site.register(models.Config)
+admin.site.register(models.Sponsor)
+admin.site.register(models.CTF)

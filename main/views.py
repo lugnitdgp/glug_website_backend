@@ -3,7 +3,7 @@ from datetime import date
 from django.shortcuts import render
 from rest_framework import viewsets, generics
 from django.contrib.auth.models import User
-from main.models import Config, Event, Profile, Facad, Alumni, About, Project, Contact, Activity, CarouselImage, Linit, Timeline, LinitImage, TechBytes, DevPost
+from main.models import Config, Event, Profile, CTF,Facad, Alumni, About, Project, Contact, Activity, CarouselImage, Linit, Timeline, LinitImage, TechBytes, DevPost
 from main import serializers
 from main.forms import ProfileForm, ProfileChangeForm, MemberRegistrationForm
 from django.http import HttpResponseRedirect
@@ -182,9 +182,12 @@ class CarouselImageViewSet(viewsets.ModelViewSet):
 
 
 class LinitViewSet(viewsets.ModelViewSet):
-    queryset = Linit.objects.all()
-    serializer_class = serializers.LinitSerializers
-    http_method_names = ['get']
+    """
+    API endpoint for Linit magazine entries
+    """
+    queryset = Linit.objects.all().order_by('-year_edition')
+    serializer_class = serializers.LinitSerializer
+    permission_classes = [AllowAny]
 
 
 class LinitPages(APIView):
@@ -249,3 +252,11 @@ class ConfigViewSet(viewsets.ModelViewSet):
     queryset = Config.objects.all()
     serializer_class = serializers.ConfigSerializers
     http_method_names = ['get']
+
+class CTFViewSet(viewsets.ModelViewSet):
+    queryset = CTF.objects.all().order_by('-created_at')
+    serializer_class = serializers.CTFSerializer
+    http_method_names = ['get']  # Read-only API
+
+    def get_serializer_context(self):
+        return {'request': self.request}
