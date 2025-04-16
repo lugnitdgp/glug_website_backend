@@ -267,6 +267,15 @@ class ProfileAdmin(admin.ModelAdmin):
         'convert_to_alumni',
     ]
 
+
+class CTFAdmin(admin.ModelAdmin):
+    list_display = ('name', 'link', 'photo_preview')
+    search_fields = ('name', 'description')
+    
+    def photo_preview(self, obj):
+        return format_html('<img src="{}" width="100" height="auto" />', obj.photo.url) if obj.photo else "-"
+    
+    photo_preview.short_description = 'Photo Preview'
     def convert_to_alumni(modeladmin, request, queryset):
         for profile in queryset:
             profile.convert_to_alumni = True
@@ -274,6 +283,8 @@ class ProfileAdmin(admin.ModelAdmin):
 
     convert_to_alumni.short_description = 'Convert to Alumni'
 
+class FacadAdmin(admin.ModelAdmin):
+    list_display = ['first_name', 'last_name', 'post', 'email','image']
 
 class AlumniAdmin(admin.ModelAdmin):
     list_display = ['first_name', 'last_name', 'passout_year']
@@ -285,6 +296,7 @@ admin.site.register(User, CustomUserAdmin)
 admin.site.register(models.Event, EventAdmin)
 admin.site.register(models.Project)
 admin.site.register(models.Profile, ProfileAdmin)
+admin.site.register(models.Facad, FacadAdmin)
 admin.site.register(models.Alumni, AlumniAdmin)
 admin.site.register(models.CarouselImage)
 admin.site.register(models.About)
@@ -295,3 +307,5 @@ admin.site.register(models.SpecialToken, SpecialTokenAdmin)
 admin.site.register(models.TechBytes)
 admin.site.register(models.DevPost)
 admin.site.register(models.Config)
+admin.site.register(models.Sponsor)
+admin.site.register(models.CTF)
