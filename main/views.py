@@ -182,9 +182,12 @@ class CarouselImageViewSet(viewsets.ModelViewSet):
 
 
 class LinitViewSet(viewsets.ModelViewSet):
-    queryset = Linit.objects.all()
-    serializer_class = serializers.LinitSerializers
-    http_method_names = ['get']
+    """
+    API endpoint for Linit magazine entries
+    """
+    queryset = Linit.objects.all().order_by('-year_edition')
+    serializer_class = serializers.LinitSerializer
+    permission_classes = [AllowAny]
 
 
 class LinitPages(APIView):

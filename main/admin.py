@@ -7,6 +7,7 @@ from django.utils.html import escape
 from django.urls import reverse, NoReverseMatch, path
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
+from django.core.exceptions import ValidationError
 from django.contrib.sessions.models import Session
 from django.contrib.contenttypes.models import ContentType
 from django.utils.crypto import get_random_string
@@ -14,6 +15,7 @@ from django.utils.crypto import get_random_string
 admin.site.site_header = "GLUG Backend | Admin Panel"
 admin.site.site_url = "http://nitdgplug.org/"
 admin.site.index_template = "admin/custom_index.html"
+
 
 #Linit Admin
 
@@ -24,12 +26,16 @@ class LinitImageInline(admin.TabularInline):
 
 
 class LinitAdmin(admin.ModelAdmin):
-    list_display = (
-        'title',
-        'description',
-        'image',
-        'year_edition',
-    )
+    list_display = ('title', 'year_edition', 'document_url')
+    list_filter = ('year_edition',)
+    search_fields = ('title', 'description')
+    ordering = ('-year_edition',)
+
+    def clean_document_url(self, obj):
+        """Validate document URL format"""
+        if obj.document_url and not obj.document_url.endswith('.pdf'):
+            raise ValidationError('URL must point to a PDF document')
+    
     inlines = [LinitImageInline]
 
 

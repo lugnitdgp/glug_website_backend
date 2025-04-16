@@ -275,6 +275,9 @@ class Project(models.Model):
     identifier = models.CharField(max_length=64, unique=True)
     title = models.CharField(max_length=512)
     description = models.TextField(blank=True, null=True)
+    # description = RichTextField(blank=True, null=True)
+    # description = MarkdownField(rendered_field='rendered', validator=VALIDATOR_STANDARD)
+    # rendered = RenderedMarkdownField()
     gitlink = models.URLField(null=True, blank=True)
     
     # Added image field matching TechBytes style
@@ -319,8 +322,17 @@ class Activity(models.Model):
 class Linit(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(max_length=1024, blank=True, null=True)
-    image = models.ImageField(upload_to='linit_images/', blank=True, null=True)
+    document_url = models.URLField(
+        max_length=500,
+        help_text="Cloudinary URL of the PDF document",
+        blank=True,
+        null=True
+    )
     year_edition = models.IntegerField(default=2018)
+
+    def clean(self):
+        if self.document_url and not self.document_url.endswith('.pdf'):
+            raise ValidationError('URL must point to a PDF document')
 
     def __str__(self):
         return self.title

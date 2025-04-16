@@ -142,6 +142,13 @@ class LinitSerializers(serializers.ModelSerializer):
         fields = ('title', 'description', 'image', 'year_edition')
 
 
+class LinitSerializer(serializers.ModelSerializer):
+    """Serializer for Linit magazine entries"""
+    class Meta:
+        model = Linit
+        fields = ('id', 'title', 'description', 'document_url', 'year_edition')
+
+
 class TimelineSerializers(serializers.ModelSerializer):
     detail_markdown = serializers.SerializerMethodField()
     class Meta:
