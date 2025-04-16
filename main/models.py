@@ -256,8 +256,17 @@ class Activity(models.Model):
 class Linit(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(max_length=1024, blank=True, null=True)
-    image = models.ImageField(upload_to='linit_images/', blank=True, null=True)
+    document_url = models.URLField(
+        max_length=500,
+        help_text="Cloudinary URL of the PDF document",
+        blank=True,
+        null=True
+    )
     year_edition = models.IntegerField(default=2018)
+
+    def clean(self):
+        if self.document_url and not self.document_url.endswith('.pdf'):
+            raise ValidationError('URL must point to a PDF document')
 
     def __str__(self):
         return self.title
