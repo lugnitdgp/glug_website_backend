@@ -151,15 +151,15 @@ class LinitSerializer(serializers.ModelSerializer):
 
 class TimelineSerializers(serializers.ModelSerializer):
     detail_markdown = serializers.SerializerMethodField()
-    class Meta:
-        model = Timeline
-        fields = ('id', 'event_name', 'detail', 'detail_markdown', 'event_time')
 
     def get_detail_markdown(self, obj):
         if obj.detail:
             return markdown.markdown(obj.detail)
         return None
 
+    class Meta:
+        model = Timeline
+        fields = ('id', 'event_name', 'detail', 'detail_markdown', 'event_time')
 
 class TechBytesSerializers(serializers.ModelSerializer):
     image_url = serializers.SerializerMethodField()
