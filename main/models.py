@@ -77,6 +77,45 @@ class Event(models.Model):
             if not Timeline.objects.filter(event_name=self.title).exists():
                 Timeline.objects.create(event_name=self.title, detail=self.description, event_time=self.event_timing.date())
 
+    bts_description = models.TextField(blank=True, null=True, help_text="Behind The Scenes description")
+    bts_image = models.ImageField(
+        upload_to='event_bts_images/',
+        null=True,
+        blank=True,
+        validators=[validate_image_size],
+        help_text="Behind The Scenes image"
+    )
+    bts_video = models.FileField(
+        upload_to='event_bts_videos/',
+        null=True,
+        blank=True,
+        validators=[validate_pdf_size],  # Reusing your file size validator
+        help_text="Behind The Scenes video file"
+    )
+    bts_uploaded_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+
+    def __str__(self):
+        return self.identifier
+
+    def save(self, *args, **kwargs):
+        if self.status == "DRAFT":
+            self.show = False
+
+        if self.event_type == "ONLINE":
+            self.venue = None
+            
+        # Update BTS timestamp if any BTS content is added/modified
+        if (self.bts_description or self.bts_image or self.bts_video) and not self.bts_uploaded_at:
+            self.bts_uploaded_at = timezone.now()
+            
+        super().save(*args, **kwargs)
+
+        if self.add_to_timeline and not Timeline.objects.filter(event_name=self.title).exists():
+            Timeline.objects.create(
+                event_name=self.title, 
+                detail=self.description, 
+                event_time=self.event_timing.date()
+            )
 
 def year_choices():
     cuur_year = datetime.date.today().year
@@ -223,6 +262,15 @@ class About(models.Model):
         return self.identifier
 
 
+from django.db import models
+from django.core.exceptions import ValidationError
+
+def validate_image_size(value):
+    """Validate that uploaded image is <= 2MB"""
+    limit = 2 * 1024 * 1024  # 2MB
+    if value.size > limit:
+        raise ValidationError('Image too large. Size should not exceed 2MB.')
+
 class Project(models.Model):
     identifier = models.CharField(max_length=64, unique=True)
     title = models.CharField(max_length=512)
@@ -231,6 +279,36 @@ class Project(models.Model):
     # description = MarkdownField(rendered_field='rendered', validator=VALIDATOR_STANDARD)
     # rendered = RenderedMarkdownField()
     gitlink = models.URLField(null=True, blank=True)
+    
+    # Added image field matching TechBytes style
+    # image = models.ImageField(
+    #     upload_to='project_images/%Y/%m/%d/',  # Organizes by date
+    #     null=True,
+    #     blank=True,
+    #     validators=[validate_image_size],
+    #     help_text='Upload project image (max 2MB)'
+    # )
+    image_link = models.URLField(
+        max_length=500,
+        help_text="Cloudinary URL of the project image",
+        blank=True,
+        null=True
+    )
+    hosted_link = models.URLField(
+        max_length=500,
+        help_text="Cloudinary URL of the hosted project",
+        blank=True,
+        null=True
+    )
+
+    def __str__(self):
+        return self.title
+
+    # def delete(self, *args, **kwargs):
+    #     """Delete image file when project is deleted"""
+    #     if self.image:
+    #         self.image.delete(save=False)
+    #     super().delete(*args, **kwargs)
 
 
 class Contact(models.Model):
@@ -256,7 +334,12 @@ class Activity(models.Model):
 class Linit(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(max_length=1024, blank=True, null=True)
-    image = models.ImageField(upload_to='linit_images/', blank=True, null=True)
+    document_url = models.URLField(
+        max_length=500,
+        help_text="Cloudinary URL of the PDF document",
+        blank=True,
+        null=True
+    )
     year_edition = models.IntegerField(default=2018)
 
     def __str__(self):
@@ -298,9 +381,7 @@ class SpecialToken(models.Model):
 
 class Timeline(models.Model):
     event_name = models.CharField(max_length=120)
-    detail = RichTextField(blank=True, null=True)
-    # detail = MarkdownField(rendered_field='rendered', validator=VALIDATOR_STANDARD)
-    # rendered = RenderedMarkdownField()
+    detail = models.TextField(blank=True, null=True)
     event_time = models.DateField(blank=True, auto_now_add=False)
 
     def __str__(self):
@@ -311,13 +392,11 @@ class Timeline(models.Model):
     #         self.event_time = timezone.now()
     #     return super(Timeline, self).save(*args, **kwargs)
 
-
 class TechBytes(models.Model):
     title = models.CharField(max_length=128)
     image = models.ImageField(upload_to='tb_images/', null=True, blank=True, validators=[validate_image_size])
     body = models.TextField(blank=True, null=True)
-    # body = MarkdownField(rendered_field='rendered', validator=VALIDATOR_STANDARD)
-    # rendered = RenderedMarkdownField()
+    link = models.URLField(max_length=255, blank=True, null=True, help_text="Optional external link for the post")
     pub_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
@@ -346,3 +425,22 @@ class Config(models.Model):
 
     def __str__(self):
         return self.key
+
+
+class Sponsor(models.Model):
+    name = models.CharField(max_length=255)
+    logo = models.ImageField(upload_to='sponsors/', validators=[validate_image_size])
+    website = models.URLField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+    
+class CTF(models.Model):
+    name = models.CharField(max_length=255)
+    photo = models.ImageField(upload_to='ctf/', validators=[validate_image_size])
+    link = models.URLField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
