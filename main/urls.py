@@ -26,6 +26,7 @@ router.register(r'alumni-by-year', views.AlumniByYearViewSet, basename="alumniby
 router.register(r'techbytes', views.TechBytesViewSet)
 router.register(r'devposts', views.DevPostViewSet)
 router.register(r'configs', views.ConfigViewSet)
+router.register(r'ctf', views.CTFViewSet)
 
 urlpatterns = router.urls
 
